@@ -7,6 +7,7 @@
   --grid-size: 32px;
   --color-text: #1a1816;
   --color-text-muted: #6a645c;
+  --color-hint: #9a948c;
   --font-display: 'Fraunces', 'Times New Roman', serif;
   --font-sans: 'Outfit', 'Segoe UI', sans-serif;
 }

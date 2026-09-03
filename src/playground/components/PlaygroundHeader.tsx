@@ -16,6 +16,7 @@ export function PlaygroundHeader({
   const [renderedText, setRenderedText] = useState(displayText)
   const [phase, setPhase] = useState<'in' | 'out'>('in')
   const previousRef = useRef(displayText)
+  const showingHint = renderedText === hint
 
   useEffect(() => {
     if (displayText === previousRef.current) return
@@ -43,7 +44,7 @@ export function PlaygroundHeader({
       <div
         className={[
           'playground-header__meta',
-          activeTitle ? 'is-project' : 'is-hint',
+          showingHint ? 'is-hint' : 'is-project',
           `is-${phase}`,
           reducedMotion ? 'is-reduced-motion' : '',
         ]
@@ -51,15 +52,14 @@ export function PlaygroundHeader({
           .join(' ')}
         aria-live="polite"
       >
-        {!activeTitle && (
+        {showingHint && (
           <span className="playground-header__icon" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <circle cx="7" cy="7" r="5.25" stroke="currentColor" strokeWidth="1.25" />
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
               <path
-                d="M7 4.2v2.8M7 9.2h.01"
+                d="M4.2 1.4 5.1 10.6l2.05-1.55 1.55 3.15c.18.36.62.51.98.33l.72-.36a.72.72 0 0 0 .33-.98L9.2 8.05l2.55-.35L4.2 1.4Z"
                 stroke="currentColor"
-                strokeWidth="1.25"
-                strokeLinecap="round"
+                strokeWidth="1.2"
+                strokeLinejoin="round"
               />
             </svg>
           </span>
