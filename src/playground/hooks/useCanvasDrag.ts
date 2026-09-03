@@ -273,7 +273,9 @@ export function useCanvasDrag({
 
   useEffect(() => {
     applyPosition({ x: startingX, y: startingY })
-  }, [applyPosition, startingX, startingY])
+    // Only re-home when the configured start point changes, not when helpers rebuild.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startingX, startingY])
 
   // Keep the viewport center stable when zoom changes
   useEffect(() => {
@@ -290,7 +292,7 @@ export function useCanvasDrag({
         x: clientWidth / 2 - centerX * nextZoom,
         y: clientHeight / 2 - centerY * nextZoom,
       })
-    } else {
+    } else if (prevZoom !== nextZoom) {
       applyPosition(positionRef.current)
     }
 

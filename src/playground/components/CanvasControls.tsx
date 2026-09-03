@@ -7,6 +7,8 @@ type CanvasControlsProps = {
   zoom: number
   minZoom: number
   maxZoom: number
+  listOpen: boolean
+  onToggleList: () => void
   onToggleLayout: () => void
   onZoomIn: () => void
   onZoomOut: () => void
@@ -21,6 +23,8 @@ export function CanvasControls({
   zoom,
   minZoom,
   maxZoom,
+  listOpen,
+  onToggleList,
   onToggleLayout,
   onZoomIn,
   onZoomOut,
@@ -37,6 +41,19 @@ export function CanvasControls({
       role="toolbar"
       aria-label="Canvas controls"
     >
+      <button
+        type="button"
+        className="canvas-controls__button"
+        onClick={onToggleList}
+        aria-pressed={listOpen}
+        aria-label={listOpen ? 'Hide project list' : 'Show project list'}
+        title={listOpen ? 'Hide list' : 'Project list'}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 4.25h10M3 8h10M3 11.75h10" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+        </svg>
+      </button>
+
       <button
         type="button"
         className="canvas-controls__button"

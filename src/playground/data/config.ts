@@ -4,7 +4,7 @@ export const playgroundConfig = {
   openLinksInNewTab: false,
   enableProximityScaling: true,
   enableMomentum: false,
-  enableHoverReveal: true,
+  enableHoverReveal: false,
   defaultLayout: 'scattered' as 'scattered' | 'bento',
   canvasWidth: 2400,
   canvasHeight: 1800,

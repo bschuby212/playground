@@ -14,6 +14,7 @@ import { getProximityScale } from '../hooks/proximityScale'
 import { getRevealOffset } from '../hooks/revealProject'
 import { useCanvasDrag } from '../hooks/useCanvasDrag'
 import { CanvasControls } from './CanvasControls'
+import { ProjectListOverlay } from './ProjectListOverlay'
 import { ProjectThumbnail } from './ProjectThumbnail'
 import './DraggableCanvas.css'
 
@@ -39,6 +40,7 @@ export function DraggableCanvas({
 }: DraggableCanvasProps) {
   const [layout, setLayout] = useState<LayoutMode>(playgroundConfig.defaultLayout)
   const [zoom, setZoom] = useState(playgroundConfig.defaultZoom)
+  const [listOpen, setListOpen] = useState(false)
   const [activeId, setActiveId] = useState<string | null>(null)
   const thumbNodesRef = useRef(new Map<string, HTMLAnchorElement>())
   const scalesRef = useRef<Record<string, number>>(
@@ -57,6 +59,10 @@ export function DraggableCanvas({
     [layout],
   )
 
+  const handlePositionChange = useCallback((offset: { x: number; y: number }) => {
+    updateScalesRef.current(offset)
+  }, [])
+
   const {
     containerRef,
     surfaceRef,
@@ -68,7 +74,6 @@ export function DraggableCanvas({
     shouldSuppressClick,
     isDragging,
     animateTo,
-    applyPosition,
   } = useCanvasDrag({
     canvasWidth: playgroundConfig.canvasWidth,
     canvasHeight: playgroundConfig.canvasHeight,
@@ -78,7 +83,7 @@ export function DraggableCanvas({
     enableMomentum: playgroundConfig.enableMomentum,
     reducedMotion,
     zoom,
-    onPositionChange: (offset) => updateScalesRef.current(offset),
+    onPositionChange: handlePositionChange,
   })
 
   const applyScaleToNode = useCallback(
@@ -226,12 +231,31 @@ export function DraggableCanvas({
     setLayout((current) => (current === 'scattered' ? 'bento' : 'scattered'))
     setActiveId(null)
     onActiveProjectChange(null)
-    // Ease back toward the default framing for the new composition
-    applyPosition({
-      x: playgroundConfig.startingX,
-      y: playgroundConfig.startingY,
-    })
-  }, [applyPosition, onActiveProjectChange])
+  }, [onActiveProjectChange])
+
+  const handleToggleList = useCallback(() => {
+    setListOpen((open) => !open)
+  }, [])
+
+  const handleLocateProject = useCallback(
+    (id: string) => {
+      const project = projects.find((item) => item.id === id)
+      const container = containerRef.current
+      if (!project || !container) return
+
+      setListOpen(false)
+      setActiveId(id)
+      onActiveProjectChange(project.title)
+
+      const z = zoomRef.current
+      const next = {
+        x: container.clientWidth / 2 - (project.x + project.width / 2) * z,
+        y: container.clientHeight / 2 - (project.y + project.height / 2) * z,
+      }
+      animateTo(next, reducedMotion ? 0 : playgroundConfig.revealDurationMs)
+    },
+    [animateTo, containerRef, onActiveProjectChange, projects, reducedMotion],
+  )
 
   const handleZoomIn = useCallback(() => {
     setZoom((current) => clampZoom(current + playgroundConfig.zoomStep))
@@ -302,11 +326,20 @@ export function DraggableCanvas({
         ))}
       </div>
 
+      <ProjectListOverlay
+        projects={projects}
+        open={listOpen}
+        onClose={() => setListOpen(false)}
+        onSelect={handleLocateProject}
+      />
+
       <CanvasControls
         layout={layout}
         zoom={zoom}
         minZoom={playgroundConfig.minZoom}
         maxZoom={playgroundConfig.maxZoom}
+        listOpen={listOpen}
+        onToggleList={handleToggleList}
         onToggleLayout={handleToggleLayout}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}

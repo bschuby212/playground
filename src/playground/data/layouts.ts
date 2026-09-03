@@ -22,15 +22,11 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
   'project-10': { x: 1920, y: 680, ...thumbnailSizes.medium },
   'project-11': { x: 200, y: 900, ...thumbnailSizes.medium },
   'project-12': { x: 640, y: 980, ...thumbnailSizes.large },
-  'project-13': { x: 1220, y: 880, ...thumbnailSizes.small },
-  'project-14': { x: 1480, y: 920, ...thumbnailSizes.medium },
-  'project-15': { x: 1900, y: 1080, ...thumbnailSizes.large },
-  'project-16': { x: 1120, y: 1180, ...thumbnailSizes.small },
 }
 
 /**
  * Clean bento rows — shared top edge per row with a consistent gap rhythm.
- * Pattern per row: large · medium · small · medium (rotated by row).
+ * Three rows of four for the current 12-item set.
  */
 export const bentoLayout: Record<string, LayoutPlacement> = (() => {
   const gap = 28
@@ -42,7 +38,6 @@ export const bentoLayout: Record<string, LayoutPlacement> = (() => {
     ['large', 'medium', 'small', 'medium'],
     ['medium', 'large', 'medium', 'small'],
     ['small', 'medium', 'large', 'medium'],
-    ['medium', 'small', 'medium', 'large'],
   ]
 
   const ids = Object.keys(scatteredLayout)
