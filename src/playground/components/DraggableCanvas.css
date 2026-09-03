@@ -1,0 +1,53 @@
+.draggable-canvas {
+  position: relative;
+  width: 100%;
+  height: clamp(22rem, 72vh, 48rem);
+  overflow: hidden;
+  border-radius: 1.125rem;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: var(--canvas-bg);
+  border: 1px solid rgba(26, 26, 26, 0.06);
+  scrollbar-width: none;
+  overscroll-behavior: none;
+}
+
+.draggable-canvas::-webkit-scrollbar {
+  display: none;
+}
+
+.draggable-canvas.is-dragging {
+  cursor: grabbing;
+}
+
+.draggable-canvas.is-dragging .project-thumbnail {
+  pointer-events: none;
+}
+
+.draggable-canvas__surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  background-color: var(--canvas-bg);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+@media (max-width: 768px) {
+  .draggable-canvas {
+    height: clamp(18rem, 62vh, 34rem);
+    border-radius: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .draggable-canvas {
+    height: clamp(16rem, 58vh, 28rem);
+  }
+}
