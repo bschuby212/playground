@@ -18,9 +18,21 @@ export function PlaygroundHeader({
   const [renderedText, setRenderedText] = useState(displayText)
   const [phase, setPhase] = useState<'in' | 'out'>('in')
   const previousRef = useRef(displayText)
-  const showingHint = renderedText === hint
+  const previousHintRef = useRef(hint)
+  const showingHint = activeTitle === null && renderedText === hint
 
   useEffect(() => {
+    // Base hint changed (desktop ↔ mobile) — sync immediately
+    if (hint !== previousHintRef.current) {
+      previousHintRef.current = hint
+      if (activeTitle === null) {
+        setRenderedText(hint)
+        previousRef.current = hint
+        setPhase('in')
+        return
+      }
+    }
+
     if (displayText === previousRef.current) return
 
     if (reducedMotion) {
@@ -38,7 +50,7 @@ export function PlaygroundHeader({
     }, 120)
 
     return () => window.clearTimeout(timeout)
-  }, [displayText, reducedMotion])
+  }, [activeTitle, displayText, hint, reducedMotion])
 
   return (
     <header className="playground-header">

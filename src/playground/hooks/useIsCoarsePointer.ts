@@ -1,21 +1,35 @@
 import { useEffect, useState } from 'react'
 
-/** True when the primary input is coarse (touch) or viewport is phone-sized. */
+function readTouchUi(): boolean {
+  if (typeof window === 'undefined') return false
+  return (
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(hover: none)').matches ||
+    window.matchMedia('(max-width: 768px)').matches
+  )
+}
+
+/** True for touch / no-hover input, or phone-sized viewports. */
 export function useIsCoarsePointer(): boolean {
-  const [isCoarse, setIsCoarse] = useState(false)
+  const [isTouchUi, setIsTouchUi] = useState(readTouchUi)
 
   useEffect(() => {
-    const coarse = window.matchMedia('(pointer: coarse)')
-    const narrow = window.matchMedia('(max-width: 768px)')
-    const update = () => setIsCoarse(coarse.matches || narrow.matches)
+    const queries = [
+      window.matchMedia('(pointer: coarse)'),
+      window.matchMedia('(hover: none)'),
+      window.matchMedia('(max-width: 768px)'),
+    ]
+    const update = () => setIsTouchUi(readTouchUi())
     update()
-    coarse.addEventListener('change', update)
-    narrow.addEventListener('change', update)
+    for (const query of queries) {
+      query.addEventListener('change', update)
+    }
     return () => {
-      coarse.removeEventListener('change', update)
-      narrow.removeEventListener('change', update)
+      for (const query of queries) {
+        query.removeEventListener('change', update)
+      }
     }
   }, [])
 
-  return isCoarse
+  return isTouchUi
 }
