@@ -3,6 +3,7 @@ export type PlaygroundProject = {
   title: string
   description: string
   skill: string
+  tool: string
   image: string
   href: string
   x: number
@@ -26,6 +27,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Saturday Design System',
     description: 'Token-led UI kit for a multi-product brand.',
     skill: 'Design systems',
+    tool: 'Figma',
     image: '/placeholders/project-01.svg',
     href: '#',
     x: 180,
@@ -38,6 +40,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Northline Branding',
     description: 'Identity and visual language for a transit startup.',
     skill: 'Brand',
+    tool: 'Illustrator',
     image: '/placeholders/project-02.svg',
     href: '#',
     x: 720,
@@ -50,6 +53,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Signal Icons',
     description: 'Compact icon set for status and system feedback.',
     skill: 'Iconography',
+    tool: 'Figma',
     image: '/placeholders/project-03.svg',
     href: '#',
     x: 1140,
@@ -62,6 +66,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Paper Trail',
     description: 'Editorial layout system for long-form reading.',
     skill: 'Editorial',
+    tool: 'InDesign',
     image: '/placeholders/project-04.svg',
     href: '#',
     x: 1480,
@@ -74,6 +79,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Orbit Metrics',
     description: 'Dashboard patterns for live product analytics.',
     skill: 'Product UI',
+    tool: 'Figma',
     image: '/placeholders/project-05.svg',
     href: '#',
     x: 1920,
@@ -86,6 +92,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Quiet Hours',
     description: 'Calm focus mode for a wellness companion app.',
     skill: 'Mobile',
+    tool: 'Figma',
     image: '/placeholders/project-06.svg',
     href: '#',
     x: 220,
@@ -98,6 +105,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Field Notes App',
     description: 'Capture flows for researchers out in the field.',
     skill: 'UX',
+    tool: 'FigJam',
     image: '/placeholders/project-07.svg',
     href: '#',
     x: 560,
@@ -110,6 +118,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Copper Studio',
     description: 'Portfolio site and booking flow for a studio.',
     skill: 'Web',
+    tool: 'Webflow',
     image: '/placeholders/project-08.svg',
     href: '#',
     x: 1120,
@@ -122,6 +131,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Bloom Pack',
     description: 'Illustration pack and motion cues for marketing.',
     skill: 'Motion',
+    tool: 'After Effects',
     image: '/placeholders/project-09.svg',
     href: '#',
     x: 1600,
@@ -134,6 +144,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Arc Kit',
     description: 'Component primitives for rapid product experiments.',
     skill: 'Prototyping',
+    tool: 'Framer',
     image: '/placeholders/project-10.svg',
     href: '#',
     x: 1920,
@@ -146,6 +157,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Harbor UI',
     description: 'Onboarding and empty states for a finance tool.',
     skill: 'Product UI',
+    tool: 'Figma',
     image: '/placeholders/project-11.svg',
     href: '#',
     x: 200,
@@ -158,6 +170,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Mesa Commerce',
     description: 'Checkout polish and merchandising modules.',
     skill: 'E-commerce',
+    tool: 'Figma',
     image: '/placeholders/project-12.svg',
     href: '#',
     x: 640,

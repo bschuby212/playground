@@ -55,6 +55,7 @@ export function ProjectListOverlay({
           <div className="project-list-overlay__row is-head" role="row">
             <span role="columnheader">Project</span>
             <span role="columnheader">Skill</span>
+            <span role="columnheader">Tool</span>
             <span role="columnheader" className="project-list-overlay__actions-head">
               Actions
             </span>
@@ -68,6 +69,9 @@ export function ProjectListOverlay({
               </div>
               <div className="project-list-overlay__skill" role="cell">
                 <span>{project.skill}</span>
+              </div>
+              <div className="project-list-overlay__tool" role="cell">
+                <span>{project.tool}</span>
               </div>
               <div className="project-list-overlay__actions" role="cell">
                 <button

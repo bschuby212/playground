@@ -87,7 +87,7 @@
 
 .project-list-overlay__row {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(5.5rem, 0.55fr) auto;
+  grid-template-columns: minmax(0, 1.5fr) minmax(5rem, 0.45fr) minmax(5rem, 0.45fr) auto;
   gap: 0.75rem;
   align-items: center;
   padding: 0.7rem 0.75rem;
@@ -136,7 +136,8 @@
   line-height: 1.35;
 }
 
-.project-list-overlay__skill span {
+.project-list-overlay__skill span,
+.project-list-overlay__tool span {
   display: inline-flex;
   align-items: center;
   padding: 0.2rem 0.5rem;
@@ -211,7 +212,8 @@
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       'project actions'
-      'skill actions';
+      'skill actions'
+      'tool actions';
     gap: 0.35rem 0.75rem;
     padding: 0.75rem 0.65rem;
   }
@@ -226,6 +228,10 @@
 
   .project-list-overlay__skill {
     grid-area: skill;
+  }
+
+  .project-list-overlay__tool {
+    grid-area: tool;
   }
 
   .project-list-overlay__actions {
