@@ -4,6 +4,7 @@ export const playgroundConfig = {
   openLinksInNewTab: false,
   enableProximityScaling: true,
   enableMomentum: false,
+  enableHoverReveal: true,
   canvasWidth: 2400,
   canvasHeight: 1800,
   gridSize: 32,
@@ -13,6 +14,9 @@ export const playgroundConfig = {
   dragThreshold: 5,
   startingX: -380,
   startingY: -220,
+  revealPadding: 56,
+  revealDurationMs: 340,
+  revealMaxNudge: 140,
   momentumFriction: 0.92,
   momentumMinVelocity: 0.15,
 } as const

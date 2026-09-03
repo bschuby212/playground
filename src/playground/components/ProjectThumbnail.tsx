@@ -108,6 +108,7 @@ function ProjectThumbnailComponent({
       onClick={handleClick}
       onPointerDown={handlePointerDown}
       aria-label={project.title}
+      data-project-id={project.id}
     >
       <img
         src={project.image}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, type PointerEvent as ReactPointerEvent } from 'react'
 import { playgroundConfig } from '../data/config'
+import { easeOutCubic } from './revealProject'
 
 type Point = { x: number; y: number }
 
@@ -41,6 +42,7 @@ export function useCanvasDrag({
   const lastSampleRef = useRef<{ point: Point; time: number } | null>(null)
   const rafRef = useRef<number | null>(null)
   const momentumRafRef = useRef<number | null>(null)
+  const revealRafRef = useRef<number | null>(null)
 
   const getBounds = useCallback(() => {
     const container = containerRef.current
@@ -55,6 +57,13 @@ export function useCanvasDrag({
       maxY: 0,
     }
   }, [canvasHeight, canvasWidth, startingX, startingY])
+
+  const stopReveal = useCallback(() => {
+    if (revealRafRef.current !== null) {
+      cancelAnimationFrame(revealRafRef.current)
+      revealRafRef.current = null
+    }
+  }, [])
 
   const applyPosition = useCallback(
     (next: Point, announce = true) => {
@@ -82,6 +91,40 @@ export function useCanvasDrag({
       momentumRafRef.current = null
     }
   }, [])
+
+  const animateTo = useCallback(
+    (target: Point, durationMs: number, onComplete?: () => void) => {
+      stopMomentum()
+      stopReveal()
+
+      if (reducedMotion || durationMs <= 0) {
+        applyPosition(target)
+        onComplete?.()
+        return
+      }
+
+      const from = { ...positionRef.current }
+      const start = performance.now()
+
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / durationMs)
+        const eased = easeOutCubic(t)
+        applyPosition({
+          x: from.x + (target.x - from.x) * eased,
+          y: from.y + (target.y - from.y) * eased,
+        })
+        if (t < 1) {
+          revealRafRef.current = requestAnimationFrame(step)
+        } else {
+          revealRafRef.current = null
+          onComplete?.()
+        }
+      }
+
+      revealRafRef.current = requestAnimationFrame(step)
+    },
+    [applyPosition, reducedMotion, stopMomentum, stopReveal],
+  )
 
   const startMomentum = useCallback(() => {
     stopMomentum()
@@ -119,6 +162,7 @@ export function useCanvasDrag({
       if (event.button !== 0 && event.pointerType === 'mouse') return
 
       stopMomentum()
+      stopReveal()
       const container = containerRef.current
       if (!container) return
 
@@ -136,7 +180,7 @@ export function useCanvasDrag({
       }
       container.classList.add('is-dragging')
     },
-    [stopMomentum],
+    [stopMomentum, stopReveal],
   )
 
   const handlePointerMove = useCallback(
@@ -202,7 +246,6 @@ export function useCanvasDrag({
         startMomentum()
       }
 
-      // Keep suppressClickRef true through the subsequent click event
       if (suppressClickRef.current) {
         window.setTimeout(() => {
           suppressClickRef.current = false
@@ -215,6 +258,7 @@ export function useCanvasDrag({
   )
 
   const shouldSuppressClick = useCallback(() => suppressClickRef.current, [])
+  const isDragging = useCallback(() => isDraggingRef.current || pointerIdRef.current !== null, [])
 
   useEffect(() => {
     applyPosition({ x: startingX, y: startingY })
@@ -232,8 +276,9 @@ export function useCanvasDrag({
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
       stopMomentum()
+      stopReveal()
     }
-  }, [stopMomentum])
+  }, [stopMomentum, stopReveal])
 
   return {
     containerRef,
@@ -244,6 +289,8 @@ export function useCanvasDrag({
     handlePointerUp: endDrag,
     handlePointerCancel: endDrag,
     shouldSuppressClick,
+    isDragging,
     applyPosition,
+    animateTo,
   }
 }
