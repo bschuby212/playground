@@ -29,15 +29,14 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
 }
 
 /**
- * Clean bento rows — aligned tops per row with a consistent gap rhythm.
+ * Clean bento rows — shared top edge per row with a consistent gap rhythm.
  * Pattern per row: large · medium · small · medium (rotated by row).
  */
 export const bentoLayout: Record<string, LayoutPlacement> = (() => {
   const gap = 28
   const originX = 160
   const originY = 160
-  const rowH = 310
-  const rowGap = 40
+  const rowGap = 48
 
   const rowPatterns: Array<Array<'large' | 'medium' | 'small'>> = [
     ['large', 'medium', 'small', 'medium'],
@@ -49,20 +48,21 @@ export const bentoLayout: Record<string, LayoutPlacement> = (() => {
   const ids = Object.keys(scatteredLayout)
   const layout: Record<string, LayoutPlacement> = {}
   let index = 0
+  let y = originY
 
-  for (let row = 0; row < rowPatterns.length; row += 1) {
+  for (const pattern of rowPatterns) {
     let x = originX
-    const y = originY + row * (rowH + rowGap)
-    for (const sizeKey of rowPatterns[row]) {
+    let rowHeight = 0
+    for (const sizeKey of pattern) {
       const id = ids[index]
       if (!id) break
       const size = thumbnailSizes[sizeKey]
-      // Vertically center smaller tiles within the row band
-      const yOffset = Math.round((rowH - size.height) / 2)
-      layout[id] = { x, y: y + yOffset, ...size }
+      layout[id] = { x, y, ...size }
       x += size.width + gap
+      rowHeight = Math.max(rowHeight, size.height)
       index += 1
     }
+    y += rowHeight + rowGap
   }
 
   return layout
