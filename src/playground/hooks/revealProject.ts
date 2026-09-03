@@ -5,6 +5,7 @@ type Point = { x: number; y: number }
 /**
  * How far to shift the canvas so a project sits more fully inside the viewport.
  * Nudges are capped so the thumbnail stays under the cursor.
+ * Coordinates account for canvas zoom (transform origin top-left).
  */
 export function getRevealOffset(
   project: PlaygroundProject,
@@ -12,11 +13,13 @@ export function getRevealOffset(
   viewport: { width: number; height: number },
   padding: number,
   maxNudge: number,
+  zoom: number,
 ): Point | null {
-  const left = project.x + canvasOffset.x
-  const top = project.y + canvasOffset.y
-  const right = left + project.width
-  const bottom = top + project.height
+  const z = Math.max(zoom, 0.001)
+  const left = project.x * z + canvasOffset.x
+  const top = project.y * z + canvasOffset.y
+  const right = left + project.width * z
+  const bottom = top + project.height * z
 
   let dx = 0
   let dy = 0

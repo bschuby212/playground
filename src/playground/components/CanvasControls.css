@@ -1,0 +1,89 @@
+.canvas-controls {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.3rem;
+  border-radius: 999px;
+  background: rgba(250, 249, 246, 0.88);
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  box-shadow: 0 4px 18px rgba(26, 26, 26, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: default;
+  touch-action: manipulation;
+}
+
+.canvas-controls__button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, opacity 140ms ease;
+}
+
+.canvas-controls__button:hover:not(:disabled) {
+  background: rgba(26, 26, 26, 0.06);
+}
+
+.canvas-controls__button:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 1px;
+}
+
+.canvas-controls__button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.canvas-controls__button[aria-pressed='true'] {
+  background: rgba(26, 26, 26, 0.08);
+}
+
+.canvas-controls__divider {
+  width: 1px;
+  height: 1rem;
+  margin: 0 0.2rem;
+  background: rgba(26, 26, 26, 0.12);
+}
+
+.canvas-controls__zoom {
+  min-width: 2.6rem;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  .canvas-controls {
+    top: 0.6rem;
+    right: 0.6rem;
+    padding: 0.22rem;
+  }
+
+  .canvas-controls__button {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .canvas-controls__zoom {
+    min-width: 2.3rem;
+    font-size: 0.7rem;
+  }
+}

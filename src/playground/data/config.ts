@@ -5,6 +5,7 @@ export const playgroundConfig = {
   enableProximityScaling: true,
   enableMomentum: false,
   enableHoverReveal: true,
+  defaultLayout: 'scattered' as 'scattered' | 'bento',
   canvasWidth: 2400,
   canvasHeight: 1800,
   gridSize: 32,
@@ -17,8 +18,13 @@ export const playgroundConfig = {
   revealPadding: 56,
   revealDurationMs: 340,
   revealMaxNudge: 140,
+  minZoom: 0.6,
+  maxZoom: 1.6,
+  zoomStep: 0.1,
+  defaultZoom: 1 as number,
   momentumFriction: 0.92,
   momentumMinVelocity: 0.15,
 } as const
 
 export type PlaygroundConfig = typeof playgroundConfig
+export type LayoutMode = PlaygroundConfig['defaultLayout']

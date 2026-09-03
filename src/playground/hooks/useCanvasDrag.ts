@@ -12,6 +12,7 @@ type UseCanvasDragOptions = {
   dragThreshold: number
   enableMomentum: boolean
   reducedMotion: boolean
+  zoom: number
   onPositionChange?: (position: Point) => void
 }
 
@@ -27,11 +28,14 @@ export function useCanvasDrag({
   dragThreshold,
   enableMomentum,
   reducedMotion,
+  zoom,
   onPositionChange,
 }: UseCanvasDragOptions) {
   const containerRef = useRef<HTMLDivElement>(null)
   const surfaceRef = useRef<HTMLDivElement>(null)
   const positionRef = useRef<Point>({ x: startingX, y: startingY })
+  const zoomRef = useRef(zoom)
+  const prevZoomRef = useRef(zoom)
   const pointerIdRef = useRef<number | null>(null)
   const dragOriginRef = useRef<Point>({ x: 0, y: 0 })
   const positionOriginRef = useRef<Point>({ x: startingX, y: startingY })
@@ -44,16 +48,19 @@ export function useCanvasDrag({
   const momentumRafRef = useRef<number | null>(null)
   const revealRafRef = useRef<number | null>(null)
 
+  zoomRef.current = zoom
+
   const getBounds = useCallback(() => {
     const container = containerRef.current
+    const z = zoomRef.current
     if (!container) {
       return { minX: startingX, maxX: startingX, minY: startingY, maxY: startingY }
     }
     const { clientWidth, clientHeight } = container
     return {
-      minX: Math.min(0, clientWidth - canvasWidth),
+      minX: Math.min(0, clientWidth - canvasWidth * z),
       maxX: 0,
-      minY: Math.min(0, clientHeight - canvasHeight),
+      minY: Math.min(0, clientHeight - canvasHeight * z),
       maxY: 0,
     }
   }, [canvasHeight, canvasWidth, startingX, startingY])
@@ -65,6 +72,13 @@ export function useCanvasDrag({
     }
   }, [])
 
+  const applyTransform = useCallback((point: Point, z: number) => {
+    const surface = surfaceRef.current
+    if (surface) {
+      surface.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) scale(${z})`
+    }
+  }, [])
+
   const applyPosition = useCallback(
     (next: Point, announce = true) => {
       const bounds = getBounds()
@@ -73,16 +87,13 @@ export function useCanvasDrag({
         y: clamp(next.y, bounds.minY, bounds.maxY),
       }
       positionRef.current = clamped
-      const surface = surfaceRef.current
-      if (surface) {
-        surface.style.transform = `translate3d(${clamped.x}px, ${clamped.y}px, 0)`
-      }
+      applyTransform(clamped, zoomRef.current)
       if (announce) {
         onPositionChange?.(clamped)
       }
       return clamped
     },
-    [getBounds, onPositionChange],
+    [applyTransform, getBounds, onPositionChange],
   )
 
   const stopMomentum = useCallback(() => {
@@ -263,6 +274,28 @@ export function useCanvasDrag({
   useEffect(() => {
     applyPosition({ x: startingX, y: startingY })
   }, [applyPosition, startingX, startingY])
+
+  // Keep the viewport center stable when zoom changes
+  useEffect(() => {
+    const container = containerRef.current
+    const prevZoom = prevZoomRef.current
+    const nextZoom = zoom
+
+    if (container && prevZoom !== nextZoom && prevZoom > 0) {
+      const { clientWidth, clientHeight } = container
+      const current = positionRef.current
+      const centerX = (-current.x + clientWidth / 2) / prevZoom
+      const centerY = (-current.y + clientHeight / 2) / prevZoom
+      applyPosition({
+        x: clientWidth / 2 - centerX * nextZoom,
+        y: clientHeight / 2 - centerY * nextZoom,
+      })
+    } else {
+      applyPosition(positionRef.current)
+    }
+
+    prevZoomRef.current = nextZoom
+  }, [applyPosition, zoom])
 
   useEffect(() => {
     const onResize = () => {

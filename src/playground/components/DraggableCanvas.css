@@ -31,7 +31,8 @@
   top: 0;
   left: 0;
   will-change: transform;
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: 0 0;
   background-color: var(--canvas-bg);
   background-image:
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),

@@ -6,7 +6,7 @@ import {
   type MouseEvent,
   type PointerEvent,
 } from 'react'
-import { playgroundConfig } from '../data/config'
+import { playgroundConfig, type LayoutMode } from '../data/config'
 import type { PlaygroundProject } from '../data/projects'
 import './ProjectThumbnail.css'
 
@@ -14,6 +14,7 @@ type ProjectThumbnailProps = {
   project: PlaygroundProject
   isActive: boolean
   reducedMotion: boolean
+  layoutMode: LayoutMode
   onActivate: (id: string | null) => void
   shouldSuppressClick: () => boolean
   registerNode: (id: string, node: HTMLAnchorElement | null) => void
@@ -23,6 +24,7 @@ function ProjectThumbnailComponent({
   project,
   isActive,
   reducedMotion,
+  layoutMode,
   onActivate,
   shouldSuppressClick,
   registerNode,
@@ -94,6 +96,7 @@ function ProjectThumbnailComponent({
         'project-thumbnail',
         isActive ? 'is-active' : '',
         reducedMotion ? 'is-reduced-motion' : '',
+        `is-layout-${layoutMode}`,
       ]
         .filter(Boolean)
         .join(' ')}

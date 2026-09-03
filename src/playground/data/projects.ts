@@ -17,6 +17,7 @@ export const thumbnailSizes = {
   large: { width: 460, height: 310 },
 } as const
 
+/** Project content only — positions come from layout maps in layouts.ts */
 export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-01',

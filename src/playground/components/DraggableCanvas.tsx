@@ -6,11 +6,13 @@ import {
   useState,
   type CSSProperties,
 } from 'react'
-import { playgroundConfig } from '../data/config'
+import { playgroundConfig, type LayoutMode } from '../data/config'
+import { applyLayout } from '../data/layouts'
 import { playgroundProjects } from '../data/projects'
 import { getProximityScale } from '../hooks/proximityScale'
 import { getRevealOffset } from '../hooks/revealProject'
 import { useCanvasDrag } from '../hooks/useCanvasDrag'
+import { CanvasControls } from './CanvasControls'
 import { ProjectThumbnail } from './ProjectThumbnail'
 import './DraggableCanvas.css'
 
@@ -20,11 +22,20 @@ type DraggableCanvasProps = {
   onActiveProjectChange: (title: string | null) => void
 }
 
+function clampZoom(value: number) {
+  return Math.min(
+    playgroundConfig.maxZoom,
+    Math.max(playgroundConfig.minZoom, Number(value.toFixed(2))),
+  )
+}
+
 export function DraggableCanvas({
   reducedMotion,
   enableProximityScaling,
   onActiveProjectChange,
 }: DraggableCanvasProps) {
+  const [layout, setLayout] = useState<LayoutMode>(playgroundConfig.defaultLayout)
+  const [zoom, setZoom] = useState(playgroundConfig.defaultZoom)
   const [activeId, setActiveId] = useState<string | null>(null)
   const thumbNodesRef = useRef(new Map<string, HTMLAnchorElement>())
   const scalesRef = useRef<Record<string, number>>(
@@ -34,6 +45,14 @@ export function DraggableCanvas({
   const leaveTimerRef = useRef<number | null>(null)
   const pointerRef = useRef({ x: 0, y: 0 })
   const revealingRef = useRef(false)
+  const zoomRef = useRef(zoom)
+
+  zoomRef.current = zoom
+
+  const projects = useMemo(
+    () => applyLayout(playgroundProjects, layout),
+    [layout],
+  )
 
   const {
     containerRef,
@@ -46,6 +65,7 @@ export function DraggableCanvas({
     shouldSuppressClick,
     isDragging,
     animateTo,
+    applyPosition,
   } = useCanvasDrag({
     canvasWidth: playgroundConfig.canvasWidth,
     canvasHeight: playgroundConfig.canvasHeight,
@@ -54,6 +74,7 @@ export function DraggableCanvas({
     dragThreshold: playgroundConfig.dragThreshold,
     enableMomentum: playgroundConfig.enableMomentum,
     reducedMotion,
+    zoom,
     onPositionChange: (offset) => updateScalesRef.current(offset),
   })
 
@@ -79,13 +100,19 @@ export function DraggableCanvas({
         height: container.clientHeight,
       }
 
-      const enabled = enableProximityScaling && !reducedMotion
-      for (const project of playgroundProjects) {
-        const scale = getProximityScale(project, offset, viewport, enabled)
+      const enabled = enableProximityScaling && !reducedMotion && layout === 'scattered'
+      for (const project of projects) {
+        const scale = getProximityScale(
+          project,
+          offset,
+          viewport,
+          zoomRef.current,
+          enabled,
+        )
         applyScaleToNode(project.id, scale)
       }
     },
-    [applyScaleToNode, containerRef, enableProximityScaling, reducedMotion],
+    [applyScaleToNode, containerRef, enableProximityScaling, layout, projects, reducedMotion],
   )
 
   useEffect(() => {
@@ -94,13 +121,13 @@ export function DraggableCanvas({
 
   useEffect(() => {
     updateScales(positionRef.current)
-  }, [enableProximityScaling, positionRef, reducedMotion, updateScales])
+  }, [enableProximityScaling, layout, positionRef, reducedMotion, updateScales, zoom])
 
   useEffect(() => {
-    for (const project of playgroundProjects) {
+    for (const project of projects) {
       applyScaleToNode(project.id, scalesRef.current[project.id] ?? 1)
     }
-  }, [activeId, applyScaleToNode])
+  }, [activeId, applyScaleToNode, projects])
 
   const registerThumb = useCallback((id: string, node: HTMLAnchorElement | null) => {
     if (node) {
@@ -118,21 +145,21 @@ export function DraggableCanvas({
 
     setActiveId(id)
     onActiveProjectChange(
-      id ? (playgroundProjects.find((p) => p.id === id)?.title ?? null) : null,
+      id ? (projects.find((p) => p.id === id)?.title ?? null) : null,
     )
-  }, [onActiveProjectChange])
+  }, [onActiveProjectChange, projects])
 
   const revealProject = useCallback(
     (id: string) => {
       if (!playgroundConfig.enableHoverReveal || isDragging()) return
 
-      const project = playgroundProjects.find((item) => item.id === id)
+      const project = projects.find((item) => item.id === id)
       const container = containerRef.current
       if (!project || !container) return
 
-      // Account for hover scale so the enlarged image still clears the edge
       const scaleBoost = reducedMotion ? 1 : playgroundConfig.hoverScale
-      const overflow = ((scaleBoost - 1) / 2) * Math.max(project.width, project.height)
+      const overflow =
+        ((scaleBoost - 1) / 2) * Math.max(project.width, project.height) * zoomRef.current
       const padding = playgroundConfig.revealPadding + overflow
 
       const next = getRevealOffset(
@@ -144,6 +171,7 @@ export function DraggableCanvas({
         },
         padding,
         playgroundConfig.revealMaxNudge,
+        zoomRef.current,
       )
 
       if (!next) return
@@ -154,7 +182,15 @@ export function DraggableCanvas({
         syncActiveFromPointer()
       })
     },
-    [animateTo, containerRef, isDragging, positionRef, reducedMotion, syncActiveFromPointer],
+    [
+      animateTo,
+      containerRef,
+      isDragging,
+      positionRef,
+      projects,
+      reducedMotion,
+      syncActiveFromPointer,
+    ],
   )
 
   const handleActivate = useCallback(
@@ -164,7 +200,6 @@ export function DraggableCanvas({
         leaveTimerRef.current = null
       }
 
-      // Ignore leave while the canvas is sliding under the cursor
       if (id === null && revealingRef.current) return
 
       if (id === null) {
@@ -177,12 +212,31 @@ export function DraggableCanvas({
       }
 
       setActiveId(id)
-      const title = playgroundProjects.find((p) => p.id === id)?.title ?? null
+      const title = projects.find((p) => p.id === id)?.title ?? null
       onActiveProjectChange(title)
       revealProject(id)
     },
-    [onActiveProjectChange, revealProject],
+    [onActiveProjectChange, projects, revealProject],
   )
+
+  const handleToggleLayout = useCallback(() => {
+    setLayout((current) => (current === 'scattered' ? 'bento' : 'scattered'))
+    setActiveId(null)
+    onActiveProjectChange(null)
+    // Ease back toward the default framing for the new composition
+    applyPosition({
+      x: playgroundConfig.startingX,
+      y: playgroundConfig.startingY,
+    })
+  }, [applyPosition, onActiveProjectChange])
+
+  const handleZoomIn = useCallback(() => {
+    setZoom((current) => clampZoom(current + playgroundConfig.zoomStep))
+  }, [])
+
+  const handleZoomOut = useCallback(() => {
+    setZoom((current) => clampZoom(current - playgroundConfig.zoomStep))
+  }, [])
 
   useEffect(() => {
     const trackPointer = (event: PointerEvent) => {
@@ -219,18 +273,29 @@ export function DraggableCanvas({
       aria-label="Interactive project canvas. Drag to explore projects."
     >
       <div ref={surfaceRef} className="draggable-canvas__surface" style={surfaceStyle}>
-        {playgroundProjects.map((project) => (
+        {projects.map((project) => (
           <ProjectThumbnail
             key={project.id}
             project={project}
             isActive={activeId === project.id}
             reducedMotion={reducedMotion}
+            layoutMode={layout}
             onActivate={handleActivate}
             shouldSuppressClick={shouldSuppressClick}
             registerNode={registerThumb}
           />
         ))}
       </div>
+
+      <CanvasControls
+        layout={layout}
+        zoom={zoom}
+        minZoom={playgroundConfig.minZoom}
+        maxZoom={playgroundConfig.maxZoom}
+        onToggleLayout={handleToggleLayout}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+      />
     </div>
   )
 }
