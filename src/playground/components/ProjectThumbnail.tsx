@@ -1,10 +1,10 @@
 import {
   memo,
   useCallback,
+  useRef,
   type CSSProperties,
   type FocusEvent,
   type MouseEvent,
-  type PointerEvent,
 } from 'react'
 import { playgroundConfig, type LayoutMode } from '../data/config'
 import type { PlaygroundProject } from '../data/projects'
@@ -15,6 +15,7 @@ type ProjectThumbnailProps = {
   isActive: boolean
   reducedMotion: boolean
   layoutMode: LayoutMode
+  touchMode: boolean
   onActivate: (id: string | null) => void
   shouldSuppressClick: () => boolean
   registerNode: (id: string, node: HTMLAnchorElement | null) => void
@@ -25,10 +26,13 @@ function ProjectThumbnailComponent({
   isActive,
   reducedMotion,
   layoutMode,
+  touchMode,
   onActivate,
   shouldSuppressClick,
   registerNode,
 }: ProjectThumbnailProps) {
+  const lastTapRef = useRef<{ id: string; time: number } | null>(null)
+
   const style = {
     '--thumb-x': `${project.x}px`,
     '--thumb-y': `${project.y}px`,
@@ -45,12 +49,14 @@ function ProjectThumbnailComponent({
   )
 
   const handleEnter = useCallback(() => {
+    if (touchMode) return
     onActivate(project.id)
-  }, [onActivate, project.id])
+  }, [onActivate, project.id, touchMode])
 
   const handleLeave = useCallback(() => {
+    if (touchMode) return
     onActivate(null)
-  }, [onActivate])
+  }, [onActivate, touchMode])
 
   const handleFocus = useCallback(
     (_event: FocusEvent<HTMLAnchorElement>) => {
@@ -61,9 +67,10 @@ function ProjectThumbnailComponent({
 
   const handleBlur = useCallback(
     (_event: FocusEvent<HTMLAnchorElement>) => {
+      if (touchMode) return
       onActivate(null)
     },
-    [onActivate],
+    [onActivate, touchMode],
   )
 
   const handleClick = useCallback(
@@ -71,18 +78,30 @@ function ProjectThumbnailComponent({
       if (shouldSuppressClick()) {
         event.preventDefault()
         event.stopPropagation()
+        return
       }
-    },
-    [shouldSuppressClick],
-  )
 
-  const handlePointerDown = useCallback(
-    (event: PointerEvent<HTMLAnchorElement>) => {
-      if (event.pointerType === 'touch') {
-        onActivate(project.id)
+      if (!touchMode) return
+
+      const now = performance.now()
+      const last = lastTapRef.current
+      const isDoubleTap =
+        last !== null &&
+        last.id === project.id &&
+        now - last.time <= playgroundConfig.doubleTapMs
+
+      if (isDoubleTap) {
+        // Second tap opens the project URL (placeholder # for now)
+        lastTapRef.current = null
+        return
       }
+
+      event.preventDefault()
+      event.stopPropagation()
+      onActivate(project.id)
+      lastTapRef.current = { id: project.id, time: now }
     },
-    [onActivate, project.id],
+    [onActivate, project.id, shouldSuppressClick, touchMode],
   )
 
   const linkTarget = playgroundConfig.openLinksInNewTab ? '_blank' : undefined
@@ -109,7 +128,6 @@ function ProjectThumbnailComponent({
       onFocus={handleFocus}
       onBlur={handleBlur}
       onClick={handleClick}
-      onPointerDown={handlePointerDown}
       aria-label={project.title}
       data-project-id={project.id}
     >

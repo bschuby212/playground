@@ -1,15 +1,15 @@
 .draggable-canvas {
   position: relative;
   width: 100%;
-  height: clamp(22rem, 72vh, 48rem);
+  height: clamp(18rem, 72vh, 48rem);
   overflow: hidden;
-  border-radius: 1.125rem;
+  border-radius: clamp(0.75rem, 1.5vw, 1.125rem);
   cursor: grab;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   background: var(--canvas-bg);
-  border: 1px solid rgba(26, 26, 26, 0.06);
+  border: 1px solid rgba(17, 17, 17, 0.06);
   scrollbar-width: none;
   overscroll-behavior: none;
 }
@@ -42,13 +42,18 @@
 
 @media (max-width: 768px) {
   .draggable-canvas {
-    height: clamp(18rem, 62vh, 34rem);
-    border-radius: 0.875rem;
+    height: clamp(16rem, 64vh, 36rem);
   }
 }
 
 @media (max-width: 480px) {
   .draggable-canvas {
-    height: clamp(16rem, 58vh, 28rem);
+    height: clamp(15rem, 60vh, 28rem);
+  }
+}
+
+@media (min-width: 1400px) {
+  .draggable-canvas {
+    height: clamp(28rem, 74vh, 52rem);
   }
 }

@@ -1,15 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Outfit:wght@400;500;600&display=swap');
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/GeistVariable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
-  --page-bg: #f3f1ec;
-  --canvas-bg: #faf9f6;
-  --grid-line: rgba(40, 36, 32, 0.07);
+  --page-bg: #ffffff;
+  --canvas-bg: #ffffff;
+  --grid-line: rgba(26, 26, 26, 0.06);
   --grid-size: 32px;
-  --color-text: #1a1816;
-  --color-text-muted: #6a645c;
-  --color-hint: #9a948c;
-  --font-display: 'Fraunces', 'Times New Roman', serif;
-  --font-sans: 'Outfit', 'Segoe UI', sans-serif;
+  --color-text: #111111;
+  --color-text-muted: #6b6b6b;
+  --color-hint: #9a9a9a;
+  --font-display: 'Instrument Serif', 'Times New Roman', serif;
+  --font-sans: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --text-body: 16px;
+  --text-h1: 48px;
 }
 
 *,
@@ -27,6 +35,8 @@ body,
 
 body {
   font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.5;
   color: var(--color-text);
   background: var(--page-bg);
   -webkit-font-smoothing: antialiased;
@@ -46,4 +56,18 @@ a {
 
 img {
   max-width: none;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --text-h1: clamp(32px, 8vw, 40px);
+    --text-body: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --text-h1: 32px;
+    --text-body: 14px;
+  }
 }

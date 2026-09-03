@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
 } from 'react'
 import { playgroundConfig, type LayoutMode } from '../data/config'
 import { applyLayout } from '../data/layouts'
@@ -19,6 +20,7 @@ import './DraggableCanvas.css'
 type DraggableCanvasProps = {
   reducedMotion: boolean
   enableProximityScaling: boolean
+  touchMode: boolean
   onActiveProjectChange: (title: string | null) => void
 }
 
@@ -32,6 +34,7 @@ function clampZoom(value: number) {
 export function DraggableCanvas({
   reducedMotion,
   enableProximityScaling,
+  touchMode,
   onActiveProjectChange,
 }: DraggableCanvasProps) {
   const [layout, setLayout] = useState<LayoutMode>(playgroundConfig.defaultLayout)
@@ -238,6 +241,17 @@ export function DraggableCanvas({
     setZoom((current) => clampZoom(current - playgroundConfig.zoomStep))
   }, [])
 
+  const handleCanvasPointerDown = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      const target = event.target as HTMLElement
+      if (touchMode && !target.closest('[data-project-id], .canvas-controls')) {
+        handleActivate(null)
+      }
+      handlePointerDown(event)
+    },
+    [handleActivate, handlePointerDown, touchMode],
+  )
+
   useEffect(() => {
     const trackPointer = (event: PointerEvent) => {
       pointerRef.current = { x: event.clientX, y: event.clientY }
@@ -265,7 +279,7 @@ export function DraggableCanvas({
     <div
       ref={containerRef}
       className="draggable-canvas"
-      onPointerDown={handlePointerDown}
+      onPointerDown={handleCanvasPointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}
@@ -280,6 +294,7 @@ export function DraggableCanvas({
             isActive={activeId === project.id}
             reducedMotion={reducedMotion}
             layoutMode={layout}
+            touchMode={touchMode}
             onActivate={handleActivate}
             shouldSuppressClick={shouldSuppressClick}
             registerNode={registerThumb}

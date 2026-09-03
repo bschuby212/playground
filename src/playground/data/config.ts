@@ -1,6 +1,6 @@
 export const playgroundConfig = {
   defaultHint: 'Hover thumbnail for info',
-  mobileHint: 'Tap thumbnail for info',
+  mobileHint: 'Double tap to view project',
   openLinksInNewTab: false,
   enableProximityScaling: true,
   enableMomentum: false,
@@ -22,6 +22,7 @@ export const playgroundConfig = {
   maxZoom: 1.6,
   zoomStep: 0.1,
   defaultZoom: 1 as number,
+  doubleTapMs: 400,
   momentumFriction: 0.92,
   momentumMinVelocity: 0.15,
 } as const

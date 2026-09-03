@@ -32,10 +32,12 @@ export function PlaygroundPage() {
           hint={defaultHint}
           activeTitle={activeTitle}
           reducedMotion={reducedMotion}
+          touchMode={isCoarsePointer}
         />
         <DraggableCanvas
           reducedMotion={reducedMotion}
           enableProximityScaling={enableProximityScaling}
+          touchMode={isCoarsePointer}
           onActiveProjectChange={handleActiveProjectChange}
         />
       </div>
