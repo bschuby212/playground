@@ -57,12 +57,15 @@ export function useCanvasDrag({
       return { minX: startingX, maxX: startingX, minY: startingY, maxY: startingY }
     }
     const { clientWidth, clientHeight } = container
-    return {
-      minX: Math.min(0, clientWidth - canvasWidth * z),
-      maxX: 0,
-      minY: Math.min(0, clientHeight - canvasHeight * z),
-      maxY: 0,
-    }
+    const overscroll = playgroundConfig.panOverscroll * z
+    const slackX = clientWidth - canvasWidth * z
+    const slackY = clientHeight - canvasHeight * z
+    // Allow scrolling past canvas edges so edge images clear the viewport.
+    const minX = Math.min(overscroll, slackX - overscroll)
+    const maxX = Math.max(overscroll, slackX - overscroll)
+    const minY = Math.min(overscroll, slackY - overscroll)
+    const maxY = Math.max(overscroll, slackY - overscroll)
+    return { minX, maxX, minY, maxY }
   }, [canvasHeight, canvasWidth, startingX, startingY])
 
   const stopReveal = useCallback(() => {

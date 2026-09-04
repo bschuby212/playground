@@ -75,6 +75,7 @@ export function DraggableCanvas({
     handlePointerCancel,
     shouldSuppressClick,
     isDragging,
+    applyPosition,
     animateTo,
   } = useCanvasDrag({
     canvasWidth: playgroundConfig.canvasWidth,
@@ -88,11 +89,13 @@ export function DraggableCanvas({
     onPositionChange: handlePositionChange,
   })
 
-  const { layerRef } = useCursorParallax({
+  useCursorParallax({
     enabled: playgroundConfig.enableCursorParallax && !touchMode && !listOpen,
     reducedMotion,
     isDragging,
     containerRef,
+    positionRef,
+    applyPosition,
   })
 
   const applyScaleToNode = useCallback(
@@ -325,22 +328,20 @@ export function DraggableCanvas({
       role="region"
       aria-label="Interactive project canvas. Drag to explore projects."
     >
-      <div ref={layerRef} className="draggable-canvas__parallax">
-        <div ref={surfaceRef} className="draggable-canvas__surface" style={surfaceStyle}>
-          {projects.map((project) => (
-            <ProjectThumbnail
-              key={project.id}
-              project={project}
-              isActive={activeId === project.id}
-              reducedMotion={reducedMotion}
-              layoutMode={layout}
-              touchMode={touchMode}
-              onActivate={handleActivate}
-              shouldSuppressClick={shouldSuppressClick}
-              registerNode={registerThumb}
-            />
-          ))}
-        </div>
+      <div ref={surfaceRef} className="draggable-canvas__surface" style={surfaceStyle}>
+        {projects.map((project) => (
+          <ProjectThumbnail
+            key={project.id}
+            project={project}
+            isActive={activeId === project.id}
+            reducedMotion={reducedMotion}
+            layoutMode={layout}
+            touchMode={touchMode}
+            onActivate={handleActivate}
+            shouldSuppressClick={shouldSuppressClick}
+            registerNode={registerThumb}
+          />
+        ))}
       </div>
 
       <ProjectListOverlay

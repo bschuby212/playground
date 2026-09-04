@@ -1,103 +1,103 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import { playgroundConfig } from '../data/config'
 
+type Point = { x: number; y: number }
+
 type UseCursorParallaxOptions = {
   enabled: boolean
   reducedMotion: boolean
   isDragging: () => boolean
   containerRef: RefObject<HTMLDivElement | null>
+  positionRef: RefObject<Point>
+  applyPosition: (next: Point) => Point
 }
 
 /**
- * Subtle same-direction follow: mouse left → viewport eases left,
- * with a light perspective tilt. Disabled while dragging / on touch / reduced motion.
+ * Website-style 2D scrolling: mouse move right/down scrolls the view
+ * right/down (content translate decreases). No center snap — only canvas bounds.
  */
 export function useCursorParallax({
   enabled,
   reducedMotion,
   isDragging,
   containerRef,
+  positionRef,
+  applyPosition,
 }: UseCursorParallaxOptions) {
-  const layerRef = useRef<HTMLDivElement>(null)
-  const targetRef = useRef({ x: 0, y: 0, rotateX: 0, rotateY: 0 })
-  const currentRef = useRef({ x: 0, y: 0, rotateX: 0, rotateY: 0 })
+  const lastPointerRef = useRef<{ x: number; y: number } | null>(null)
+  const pendingRef = useRef({ x: 0, y: 0 })
   const rafRef = useRef<number | null>(null)
-  const activeRef = useRef(false)
 
   useEffect(() => {
     const container = containerRef.current
-    const layer = layerRef.current
-    if (!container || !layer) return
+    if (!container) return
 
     const canRun = enabled && !reducedMotion
     if (!canRun) {
-      layer.style.transform = 'translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg)'
+      lastPointerRef.current = null
+      pendingRef.current = { x: 0, y: 0 }
       return
     }
 
-    const { parallaxMaxShift, parallaxMaxTilt, parallaxEase } = playgroundConfig
+    const { parallaxGain, parallaxEase } = playgroundConfig
 
-    const apply = () => {
-      const current = currentRef.current
-      const target = targetRef.current
-      current.x += (target.x - current.x) * parallaxEase
-      current.y += (target.y - current.y) * parallaxEase
-      current.rotateX += (target.rotateX - current.rotateX) * parallaxEase
-      current.rotateY += (target.rotateY - current.rotateY) * parallaxEase
-
-      layer.style.transform = `translate3d(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px, 0) rotateX(${current.rotateX.toFixed(3)}deg) rotateY(${current.rotateY.toFixed(3)}deg)`
-
-      const settled =
-        Math.abs(target.x - current.x) < 0.05 &&
-        Math.abs(target.y - current.y) < 0.05 &&
-        Math.abs(target.rotateX - current.rotateX) < 0.01 &&
-        Math.abs(target.rotateY - current.rotateY) < 0.01
-
-      if (!settled || activeRef.current) {
-        rafRef.current = requestAnimationFrame(apply)
-      } else {
+    const flush = () => {
+      const pending = pendingRef.current
+      if (pending.x === 0 && pending.y === 0) {
         rafRef.current = null
+        return
       }
+
+      const stepX = pending.x * parallaxEase
+      const stepY = pending.y * parallaxEase
+      pending.x -= stepX
+      pending.y -= stepY
+
+      if (Math.abs(pending.x) < 0.05) pending.x = 0
+      if (Math.abs(pending.y) < 0.05) pending.y = 0
+
+      const current = positionRef.current
+      applyPosition({
+        x: current.x + stepX,
+        y: current.y + stepY,
+      })
+
+      rafRef.current = requestAnimationFrame(flush)
     }
 
     const kick = () => {
       if (rafRef.current === null) {
-        rafRef.current = requestAnimationFrame(apply)
+        rafRef.current = requestAnimationFrame(flush)
       }
     }
 
     const onMove = (event: PointerEvent) => {
       if (event.pointerType !== 'mouse' || isDragging()) {
-        targetRef.current = { x: 0, y: 0, rotateX: 0, rotateY: 0 }
-        activeRef.current = false
-        kick()
+        lastPointerRef.current = null
         return
       }
 
-      const rect = container.getBoundingClientRect()
-      const nx = ((event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5) * 2
-      const ny = ((event.clientY - rect.top) / Math.max(rect.height, 1) - 0.5) * 2
+      const last = lastPointerRef.current
+      lastPointerRef.current = { x: event.clientX, y: event.clientY }
+      if (!last) return
 
-      // Same direction: mouse left → content shifts left (viewport follows)
-      targetRef.current = {
-        x: nx * parallaxMaxShift,
-        y: ny * parallaxMaxShift,
-        rotateY: nx * parallaxMaxTilt,
-        rotateX: -ny * parallaxMaxTilt,
-      }
-      activeRef.current = true
+      const dx = event.clientX - last.x
+      const dy = event.clientY - last.y
+      if (dx === 0 && dy === 0) return
+
+      // Scroll-style: move mouse right → view scrolls right → translate X decreases
+      pendingRef.current.x -= dx * parallaxGain
+      pendingRef.current.y -= dy * parallaxGain
       kick()
     }
 
     const onLeave = () => {
-      targetRef.current = { x: 0, y: 0, rotateX: 0, rotateY: 0 }
-      activeRef.current = false
-      kick()
+      // Keep pan where it is — only clear tracking sample so re-entry does not jump
+      lastPointerRef.current = null
     }
 
     container.addEventListener('pointermove', onMove, { passive: true })
     container.addEventListener('pointerleave', onLeave)
-    kick()
 
     return () => {
       container.removeEventListener('pointermove', onMove)
@@ -107,7 +107,5 @@ export function useCursorParallax({
         rafRef.current = null
       }
     }
-  }, [containerRef, enabled, isDragging, reducedMotion])
-
-  return { layerRef }
+  }, [applyPosition, containerRef, enabled, isDragging, positionRef, reducedMotion])
 }
