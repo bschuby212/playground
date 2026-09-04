@@ -13,6 +13,8 @@ export const playgroundConfig = {
   parallaxCenterGain: 0.16,
   /** Radius (fraction of half-viewport) that stays in the gentle center band. */
   parallaxCenterSoftZone: 0.55,
+  /** Extra multiplier on vertical move-to-pan (viewport is shorter than wide). */
+  parallaxVerticalBoost: 1.45,
   /**
    * How far past a canvas edge you can pan, as a fraction of the viewport.
    * 0.5 ≈ bring that canvas edge to the viewport center (scales with screen + zoom).
@@ -25,6 +27,8 @@ export const playgroundConfig = {
   edgePanZoneMax: 140,
   /** Base max auto-pan speed (px/frame at ~700px short side, 1x zoom). */
   edgePanMaxSpeed: 8,
+  /** Extra multiplier for top/bottom edge auto-pan. */
+  edgePanVerticalBoost: 1.55,
   defaultLayout: 'scattered' as 'scattered' | 'bento',
   canvasWidth: 2400,
   canvasHeight: 1800,

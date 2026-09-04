@@ -59,6 +59,8 @@ export function useCursorParallax({
       parallaxCenterGain,
       parallaxCenterSoftZone,
       parallaxEase,
+      parallaxVerticalBoost,
+      edgePanVerticalBoost,
     } = playgroundConfig
 
     const getEdgeMetrics = (width: number, height: number) => {
@@ -72,7 +74,7 @@ export function useCursorParallax({
         playgroundConfig.edgePanMaxSpeed *
         (shortSide / 700) *
         (0.75 + zoomRef.current * 0.35)
-      return { zone, speed }
+      return { zone, speed, speedY: speed * edgePanVerticalBoost }
     }
 
     /** 0 at center → 1 near rim; keeps middle of the port gentle. */
@@ -127,12 +129,12 @@ export function useCursorParallax({
       let nearEdge = false
       if (pointer) {
         const rect = container.getBoundingClientRect()
-        const { zone, speed } = getEdgeMetrics(rect.width, rect.height)
+        const { zone, speed, speedY } = getEdgeMetrics(rect.width, rect.height)
         const localX = pointer.x - rect.left
         const localY = pointer.y - rect.top
 
-        const up = edgePush(localY, zone, speed)
-        const down = edgePush(rect.height - localY, zone, speed)
+        const up = edgePush(localY, zone, speedY)
+        const down = edgePush(rect.height - localY, zone, speedY)
         const left = edgePush(localX, zone, speed)
         const right = edgePush(rect.width - localX, zone, speed)
 
@@ -194,7 +196,7 @@ export function useCursorParallax({
         const localY = event.clientY - rect.top
         const gain = gainAt(localX, localY, rect.width, rect.height)
         pendingRef.current.x -= dx * gain
-        pendingRef.current.y -= dy * gain
+        pendingRef.current.y -= dy * gain * parallaxVerticalBoost
       }
       kick()
     }
