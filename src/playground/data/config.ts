@@ -29,6 +29,8 @@ export const playgroundConfig = {
   edgePanMaxSpeed: 8,
   /** Extra multiplier for top/bottom edge auto-pan. */
   edgePanVerticalBoost: 1.55,
+  /** Padding around the toolbar where cursor-follow pan is disabled (px). */
+  controlsDeadZone: 56,
   defaultLayout: 'scattered' as 'scattered' | 'bento',
   canvasWidth: 2400,
   canvasHeight: 1800,

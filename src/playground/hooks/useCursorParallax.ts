@@ -21,7 +21,7 @@ function clamp(value: number, min: number, max: number) {
  * Cursor-driven canvas pan:
  * 1) Move mouse → scroll-style pan, gentler in the center, stronger toward edges
  * 2) Rest near a viewport edge → slow auto-pan (Figma/Miro style)
- * Yields fully while dragging. Speeds/zones scale with viewport + zoom.
+ * Yields fully while dragging or while over the toolbar dead zone.
  */
 export function useCursorParallax({
   enabled,
@@ -61,7 +61,21 @@ export function useCursorParallax({
       parallaxEase,
       parallaxVerticalBoost,
       edgePanVerticalBoost,
+      controlsDeadZone,
     } = playgroundConfig
+
+    const inControlsDeadZone = (clientX: number, clientY: number) => {
+      const controls = container.querySelector('.canvas-controls')
+      if (!controls) return false
+      const rect = controls.getBoundingClientRect()
+      const pad = controlsDeadZone
+      return (
+        clientX >= rect.left - pad &&
+        clientX <= rect.right + pad &&
+        clientY >= rect.top - pad &&
+        clientY <= rect.bottom + pad
+      )
+    }
 
     const getEdgeMetrics = (width: number, height: number) => {
       const shortSide = Math.min(width, height)
@@ -117,6 +131,16 @@ export function useCursorParallax({
         return
       }
 
+      const pointer = pointerRef.current
+      if (pointer && inControlsDeadZone(pointer.x, pointer.y)) {
+        pendingRef.current = { x: 0, y: 0 }
+        lastPointerRef.current = null
+        if (pointerInsideRef.current) {
+          rafRef.current = requestAnimationFrame(tick)
+        }
+        return
+      }
+
       const pending = pendingRef.current
       let stepX = pending.x * parallaxEase
       let stepY = pending.y * parallaxEase
@@ -125,7 +149,6 @@ export function useCursorParallax({
       if (Math.abs(pending.x) < 0.05) pending.x = 0
       if (Math.abs(pending.y) < 0.05) pending.y = 0
 
-      const pointer = pointerRef.current
       let nearEdge = false
       if (pointer) {
         const rect = container.getBoundingClientRect()
@@ -174,7 +197,7 @@ export function useCursorParallax({
       pointerInsideRef.current = true
       pointerRef.current = { x: event.clientX, y: event.clientY }
 
-      if (isDragging()) {
+      if (isDragging() || inControlsDeadZone(event.clientX, event.clientY)) {
         lastPointerRef.current = null
         pendingRef.current = { x: 0, y: 0 }
         kick()
