@@ -6,8 +6,25 @@ export const playgroundConfig = {
   enableMomentum: false,
   enableHoverReveal: false,
   enableCursorParallax: true,
-  parallaxEase: 0.18,
-  parallaxGain: 0.55,
+  parallaxEase: 0.14,
+  /** Peak move-to-pan gain near edges. Center uses parallaxCenterGain. */
+  parallaxGain: 0.42,
+  /** Soft gain while the pointer is in the middle of the viewport. */
+  parallaxCenterGain: 0.16,
+  /** Radius (fraction of half-viewport) that stays in the gentle center band. */
+  parallaxCenterSoftZone: 0.55,
+  /**
+   * How far past a canvas edge you can pan, as a fraction of the viewport.
+   * 0.5 ≈ bring that canvas edge to the viewport center (scales with screen + zoom).
+   */
+  panClearanceX: 0.5,
+  panClearanceY: 0.62,
+  /** Edge auto-pan band as a fraction of the shorter viewport side. */
+  edgePanZoneFraction: 0.14,
+  edgePanZoneMin: 64,
+  edgePanZoneMax: 140,
+  /** Base max auto-pan speed (px/frame at ~700px short side, 1x zoom). */
+  edgePanMaxSpeed: 8,
   defaultLayout: 'scattered' as 'scattered' | 'bento',
   canvasWidth: 2400,
   canvasHeight: 1800,
@@ -18,8 +35,6 @@ export const playgroundConfig = {
   dragThreshold: 5,
   startingX: -380,
   startingY: -220,
-  /** Extra pan room past canvas edges so edge images can clear the viewport. */
-  panOverscroll: 320,
   revealPadding: 56,
   revealDurationMs: 340,
   revealMaxNudge: 140,

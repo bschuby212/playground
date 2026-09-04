@@ -54,7 +54,7 @@ export function PlaygroundHeader({
 
   return (
     <header className="playground-header">
-      <h1 className="playground-header__title">Playground</h1>
+      <h1 className="playground-header__title">Design Playground</h1>
       <div
         className={[
           'playground-header__meta',

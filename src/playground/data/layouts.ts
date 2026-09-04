@@ -8,36 +8,30 @@ export type LayoutPlacement = {
   height: number
 }
 
-/** Organic scattered placement — current freeform composition. */
+/** Organic scattered placement — freeform composition for eight projects. */
 export const scatteredLayout: Record<string, LayoutPlacement> = {
-  'project-01': { x: 180, y: 200, ...thumbnailSizes.large },
-  'project-02': { x: 720, y: 120, ...thumbnailSizes.medium },
-  'project-03': { x: 1140, y: 240, ...thumbnailSizes.small },
-  'project-04': { x: 1480, y: 150, ...thumbnailSizes.medium },
-  'project-05': { x: 1920, y: 280, ...thumbnailSizes.large },
-  'project-06': { x: 220, y: 580, ...thumbnailSizes.small },
-  'project-07': { x: 560, y: 560, ...thumbnailSizes.large },
-  'project-08': { x: 1120, y: 520, ...thumbnailSizes.medium },
-  'project-09': { x: 1600, y: 500, ...thumbnailSizes.small },
-  'project-10': { x: 1920, y: 680, ...thumbnailSizes.medium },
-  'project-11': { x: 200, y: 900, ...thumbnailSizes.medium },
-  'project-12': { x: 640, y: 980, ...thumbnailSizes.large },
+  'project-01': { x: 160, y: 180, ...thumbnailSizes.large },
+  'project-02': { x: 700, y: 110, ...thumbnailSizes.medium },
+  'project-03': { x: 1120, y: 200, ...thumbnailSizes.large },
+  'project-04': { x: 1680, y: 140, ...thumbnailSizes.medium },
+  'project-05': { x: 2040, y: 420, ...thumbnailSizes.tall },
+  'project-06': { x: 200, y: 560, ...thumbnailSizes.medium },
+  'project-07': { x: 620, y: 560, ...thumbnailSizes.large },
+  'project-08': { x: 1180, y: 580, ...thumbnailSizes.large },
 }
 
 /**
- * Clean bento rows — shared top edge per row with a consistent gap rhythm.
- * Three rows of four for the current 12-item set.
+ * Clean bento rows — two rows of four for the current 8-item set.
  */
 export const bentoLayout: Record<string, LayoutPlacement> = (() => {
   const gap = 28
   const originX = 160
-  const originY = 160
+  const originY = 180
   const rowGap = 48
 
-  const rowPatterns: Array<Array<'large' | 'medium' | 'small'>> = [
-    ['large', 'medium', 'small', 'medium'],
-    ['medium', 'large', 'medium', 'small'],
-    ['small', 'medium', 'large', 'medium'],
+  const rowPatterns: Array<Array<'large' | 'medium' | 'small' | 'tall'>> = [
+    ['large', 'medium', 'large', 'medium'],
+    ['medium', 'large', 'large', 'tall'],
   ]
 
   const ids = Object.keys(scatteredLayout)

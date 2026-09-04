@@ -18,6 +18,64 @@ function stopDrag(event: ReactPointerEvent) {
   event.stopPropagation()
 }
 
+/** Stacked rows with thumb + text — reads as a list, not a grid. */
+function ListIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="1.5" y="2" width="3.2" height="3.2" rx="0.7" fill="currentColor" />
+      <path d="M6.4 2.7h8M6.4 4.5h5.2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+      <rect x="1.5" y="6.4" width="3.2" height="3.2" rx="0.7" fill="currentColor" />
+      <path d="M6.4 7.1h8M6.4 8.9h5.2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+      <rect x="1.5" y="10.8" width="3.2" height="3.2" rx="0.7" fill="currentColor" />
+      <path d="M6.4 11.5h8M6.4 13.3h5.2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+/** Loose freeform tiles — organic scatter, not aligned. */
+function ScatteredIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="1" y="1.2" width="4.4" height="3" rx="0.7" fill="currentColor" opacity="0.9" />
+      <rect x="8.2" y="0.8" width="6.2" height="4.4" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="2.4" y="5.8" width="3.2" height="2.6" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="7.4" y="6.6" width="2.8" height="2.2" rx="0.7" fill="currentColor" opacity="0.9" />
+      <rect x="11.2" y="6.2" width="3.6" height="3.4" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="1.2" y="10.4" width="5.4" height="4.4" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="8.6" y="11.2" width="4.8" height="3.2" rx="0.7" fill="currentColor" opacity="0.9" />
+    </svg>
+  )
+}
+
+/** Tight uneven bento cells — structured mosaic. */
+function BentoIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="1.25" y="1.25" width="6.6" height="6.6" rx="1" fill="currentColor" opacity="0.92" />
+      <rect x="9" y="1.25" width="5.75" height="3" rx="1" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="9" y="5.1" width="5.75" height="2.75" rx="1" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="1.25" y="9" width="3.1" height="5.75" rx="1" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="5.2" y="9" width="9.55" height="5.75" rx="1" fill="currentColor" opacity="0.92" />
+    </svg>
+  )
+}
+
+function MinusIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3.5 8h9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export function CanvasControls({
   viewMode,
   zoom,
@@ -47,14 +105,7 @@ export function CanvasControls({
           aria-label="List view"
           title="List"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path
-              d="M3 4.25h10M3 8h10M3 11.75h10"
-              stroke="currentColor"
-              strokeWidth="1.35"
-              strokeLinecap="round"
-            />
-          </svg>
+          <ListIcon />
         </button>
 
         <button
@@ -65,12 +116,7 @@ export function CanvasControls({
           aria-label="Scattered drag grid"
           title="Scattered"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <rect x="1.5" y="2.5" width="5" height="4" rx="1" stroke="currentColor" strokeWidth="1.3" />
-            <rect x="9" y="1.5" width="5.5" height="5.5" rx="1" stroke="currentColor" strokeWidth="1.3" />
-            <rect x="2.5" y="9" width="4.5" height="5" rx="1" stroke="currentColor" strokeWidth="1.3" />
-            <rect x="9.5" y="9.5" width="5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.3" />
-          </svg>
+          <ScatteredIcon />
         </button>
 
         <button
@@ -81,12 +127,7 @@ export function CanvasControls({
           aria-label="Bento layout"
           title="Bento"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <rect x="1.75" y="1.75" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.3" />
-            <rect x="9.25" y="1.75" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.3" />
-            <rect x="1.75" y="9.25" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.3" />
-            <rect x="9.25" y="9.25" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.3" />
-          </svg>
+          <BentoIcon />
         </button>
       </div>
 
@@ -100,9 +141,7 @@ export function CanvasControls({
         aria-label="Zoom out"
         title="Zoom out"
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M4 8h8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        </svg>
+        <MinusIcon />
       </button>
 
       <span className="canvas-controls__zoom" aria-live="polite">
@@ -117,9 +156,7 @@ export function CanvasControls({
         aria-label="Zoom in"
         title="Zoom in"
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M8 4v8M4 8h8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        </svg>
+        <PlusIcon />
       </button>
     </div>
   )

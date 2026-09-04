@@ -92,6 +92,7 @@ export function DraggableCanvas({
   useCursorParallax({
     enabled: playgroundConfig.enableCursorParallax && !touchMode && !listOpen,
     reducedMotion,
+    zoom,
     isDragging,
     containerRef,
     positionRef,
@@ -312,15 +313,24 @@ export function DraggableCanvas({
       ({
         width: playgroundConfig.canvasWidth,
         height: playgroundConfig.canvasHeight,
-        '--grid-size': `${playgroundConfig.gridSize}px`,
       }) as CSSProperties,
     [],
+  )
+
+  const frameStyle = useMemo(
+    () =>
+      ({
+        '--grid-size': `${playgroundConfig.gridSize}px`,
+        '--grid-cell': `${playgroundConfig.gridSize * zoom}px`,
+      }) as CSSProperties,
+    [zoom],
   )
 
   return (
     <div
       ref={containerRef}
       className="draggable-canvas"
+      style={frameStyle}
       onPointerDown={handleCanvasPointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}

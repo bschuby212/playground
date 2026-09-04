@@ -57,14 +57,16 @@ export function useCanvasDrag({
       return { minX: startingX, maxX: startingX, minY: startingY, maxY: startingY }
     }
     const { clientWidth, clientHeight } = container
-    const overscroll = playgroundConfig.panOverscroll * z
+    // Viewport-relative clearance: scales with screen size. Slack uses zoomed
+    // canvas size so bounds stay correct at every zoom level.
+    const padX = clientWidth * playgroundConfig.panClearanceX
+    const padY = clientHeight * playgroundConfig.panClearanceY
     const slackX = clientWidth - canvasWidth * z
     const slackY = clientHeight - canvasHeight * z
-    // Allow scrolling past canvas edges so edge images clear the viewport.
-    const minX = Math.min(overscroll, slackX - overscroll)
-    const maxX = Math.max(overscroll, slackX - overscroll)
-    const minY = Math.min(overscroll, slackY - overscroll)
-    const maxY = Math.max(overscroll, slackY - overscroll)
+    const minX = Math.min(padX, slackX - padX)
+    const maxX = Math.max(padX, slackX - padX)
+    const minY = Math.min(padY, slackY - padY)
+    const maxY = Math.max(padY, slackY - padY)
     return { minX, maxX, minY, maxY }
   }, [canvasHeight, canvasWidth, startingX, startingY])
 
@@ -77,8 +79,16 @@ export function useCanvasDrag({
 
   const applyTransform = useCallback((point: Point, z: number) => {
     const surface = surfaceRef.current
+    const container = containerRef.current
     if (surface) {
       surface.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) scale(${z})`
+    }
+    // Viewport-filling paper grid tracks pan/zoom even past canvas edges
+    if (container) {
+      const cell = playgroundConfig.gridSize * z
+      container.style.setProperty('--grid-cell', `${cell}px`)
+      container.style.setProperty('--grid-x', `${point.x}px`)
+      container.style.setProperty('--grid-y', `${point.y}px`)
     }
   }, [])
 
