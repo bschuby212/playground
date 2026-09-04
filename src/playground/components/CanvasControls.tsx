@@ -18,44 +18,66 @@ function stopDrag(event: ReactPointerEvent) {
   event.stopPropagation()
 }
 
-/** Stacked rows with thumb + text — reads as a list, not a grid. */
+/** Lucide table — list view */
 function ListIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <rect x="1.5" y="2" width="3.2" height="3.2" rx="0.7" fill="currentColor" />
-      <path d="M6.4 2.7h8M6.4 4.5h5.2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
-      <rect x="1.5" y="6.4" width="3.2" height="3.2" rx="0.7" fill="currentColor" />
-      <path d="M6.4 7.1h8M6.4 8.9h5.2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
-      <rect x="1.5" y="10.8" width="3.2" height="3.2" rx="0.7" fill="currentColor" />
-      <path d="M6.4 11.5h8M6.4 13.3h5.2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 3v18" />
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M3 9h18" />
+      <path d="M3 15h18" />
     </svg>
   )
 }
 
-/** Loose freeform tiles — organic scatter, not aligned. */
+/** Lucide square-dimensions — scattered / scroll canvas */
 function ScatteredIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <rect x="1" y="1.2" width="4.4" height="3" rx="0.7" fill="currentColor" opacity="0.9" />
-      <rect x="8.2" y="0.8" width="6.2" height="4.4" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="2.4" y="5.8" width="3.2" height="2.6" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="7.4" y="6.6" width="2.8" height="2.2" rx="0.7" fill="currentColor" opacity="0.9" />
-      <rect x="11.2" y="6.2" width="3.6" height="3.4" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="1.2" y="10.4" width="5.4" height="4.4" rx="0.7" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="8.6" y="11.2" width="4.8" height="3.2" rx="0.7" fill="currentColor" opacity="0.9" />
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M12 7H7v5" />
+      <path d="M12 17h5v-5" />
     </svg>
   )
 }
 
-/** Tight uneven bento cells — structured mosaic. */
+/** Lucide grid-2x2 — bento grid */
 function BentoIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <rect x="1.25" y="1.25" width="6.6" height="6.6" rx="1" fill="currentColor" opacity="0.92" />
-      <rect x="9" y="1.25" width="5.75" height="3" rx="1" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="9" y="5.1" width="5.75" height="2.75" rx="1" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="1.25" y="9" width="3.1" height="5.75" rx="1" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="5.2" y="9" width="9.55" height="5.75" rx="1" fill="currentColor" opacity="0.92" />
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 3v18" />
+      <path d="M3 12h18" />
+      <rect x="3" y="3" width="18" height="18" rx="2" />
     </svg>
   )
 }
