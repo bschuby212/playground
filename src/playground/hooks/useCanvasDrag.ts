@@ -4,15 +4,22 @@ import { easeOutCubic } from './revealProject'
 
 type Point = { x: number; y: number }
 
+export type ContentBounds = {
+  left: number
+  top: number
+  right: number
+  bottom: number
+}
+
 type UseCanvasDragOptions = {
-  canvasWidth: number
-  canvasHeight: number
   startingX: number
   startingY: number
   dragThreshold: number
   enableMomentum: boolean
   reducedMotion: boolean
   zoom: number
+  /** Project AABB in canvas space — pan stops a bit past these edges. */
+  contentBounds: ContentBounds
   onPositionChange?: (position: Point) => void
 }
 
@@ -21,14 +28,13 @@ function clamp(value: number, min: number, max: number) {
 }
 
 export function useCanvasDrag({
-  canvasWidth,
-  canvasHeight,
   startingX,
   startingY,
   dragThreshold,
   enableMomentum,
   reducedMotion,
   zoom,
+  contentBounds,
   onPositionChange,
 }: UseCanvasDragOptions) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -36,6 +42,7 @@ export function useCanvasDrag({
   const positionRef = useRef<Point>({ x: startingX, y: startingY })
   const zoomRef = useRef(zoom)
   const prevZoomRef = useRef(zoom)
+  const contentBoundsRef = useRef(contentBounds)
   const pointerIdRef = useRef<number | null>(null)
   const dragOriginRef = useRef<Point>({ x: 0, y: 0 })
   const positionOriginRef = useRef<Point>({ x: startingX, y: startingY })
@@ -49,6 +56,7 @@ export function useCanvasDrag({
   const revealRafRef = useRef<number | null>(null)
 
   zoomRef.current = zoom
+  contentBoundsRef.current = contentBounds
 
   const getBounds = useCallback(() => {
     const container = containerRef.current
@@ -57,18 +65,25 @@ export function useCanvasDrag({
       return { minX: startingX, maxX: startingX, minY: startingY, maxY: startingY }
     }
     const { clientWidth, clientHeight } = container
-    // Viewport-relative clearance: scales with screen size. Slack uses zoomed
-    // canvas size so bounds stay correct at every zoom level.
-    const padX = clientWidth * playgroundConfig.panClearanceX
-    const padY = clientHeight * playgroundConfig.panClearanceY
-    const slackX = clientWidth - canvasWidth * z
-    const slackY = clientHeight - canvasHeight * z
-    const minX = Math.min(padX, slackX - padX)
-    const maxX = Math.max(padX, slackX - padX)
-    const minY = Math.min(padY, slackY - padY)
-    const maxY = Math.max(padY, slackY - padY)
-    return { minX, maxX, minY, maxY }
-  }, [canvasHeight, canvasWidth, startingX, startingY])
+    const content = contentBoundsRef.current
+    const past = Math.max(
+      playgroundConfig.panPastImages,
+      Math.min(clientWidth, clientHeight) * playgroundConfig.panPastImagesViewport,
+    )
+
+    // Translate so outermost images can clear the viewport by `past` px.
+    const maxX = past - content.left * z
+    const minX = clientWidth - past - content.right * z
+    const maxY = past - content.top * z
+    const minY = clientHeight - past - content.bottom * z
+
+    return {
+      minX: Math.min(minX, maxX),
+      maxX: Math.max(minX, maxX),
+      minY: Math.min(minY, maxY),
+      maxY: Math.max(minY, maxY),
+    }
+  }, [startingX, startingY])
 
   const stopReveal = useCallback(() => {
     if (revealRafRef.current !== null) {

@@ -121,33 +121,33 @@ export function CanvasControls({
       <div className="canvas-controls__views" role="group" aria-label="View mode">
         <button
           type="button"
-          className="canvas-controls__button"
+          className="canvas-controls__button canvas-controls__button--tooltip"
+          data-tooltip="Table view"
           onClick={() => onSelectView('list')}
           aria-pressed={viewMode === 'list'}
-          aria-label="List view"
-          title="List"
+          aria-label="Table view"
         >
           <ListIcon />
         </button>
 
         <button
           type="button"
-          className="canvas-controls__button"
+          className="canvas-controls__button canvas-controls__button--tooltip"
+          data-tooltip="Canvas view"
           onClick={() => onSelectView('scattered')}
           aria-pressed={viewMode === 'scattered'}
-          aria-label="Scattered drag grid"
-          title="Scattered"
+          aria-label="Canvas view"
         >
           <ScatteredIcon />
         </button>
 
         <button
           type="button"
-          className="canvas-controls__button"
+          className="canvas-controls__button canvas-controls__button--tooltip"
+          data-tooltip="Grid view"
           onClick={() => onSelectView('bento')}
           aria-pressed={viewMode === 'bento'}
-          aria-label="Bento layout"
-          title="Bento"
+          aria-label="Grid view"
         >
           <BentoIcon />
         </button>

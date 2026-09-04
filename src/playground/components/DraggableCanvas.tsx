@@ -61,6 +61,20 @@ export function DraggableCanvas({
     [layout],
   )
 
+  const contentBounds = useMemo(() => {
+    let left = Infinity
+    let top = Infinity
+    let right = -Infinity
+    let bottom = -Infinity
+    for (const project of projects) {
+      left = Math.min(left, project.x)
+      top = Math.min(top, project.y)
+      right = Math.max(right, project.x + project.width)
+      bottom = Math.max(bottom, project.y + project.height)
+    }
+    return { left, top, right, bottom }
+  }, [projects])
+
   const handlePositionChange = useCallback((offset: { x: number; y: number }) => {
     updateScalesRef.current(offset)
   }, [])
@@ -78,14 +92,13 @@ export function DraggableCanvas({
     applyPosition,
     animateTo,
   } = useCanvasDrag({
-    canvasWidth: playgroundConfig.canvasWidth,
-    canvasHeight: playgroundConfig.canvasHeight,
     startingX: playgroundConfig.startingX,
     startingY: playgroundConfig.startingY,
     dragThreshold: playgroundConfig.dragThreshold,
     enableMomentum: playgroundConfig.enableMomentum,
     reducedMotion,
     zoom,
+    contentBounds,
     onPositionChange: handlePositionChange,
   })
 

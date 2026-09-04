@@ -16,11 +16,11 @@ export const playgroundConfig = {
   /** Extra multiplier on vertical move-to-pan (viewport is shorter than wide). */
   parallaxVerticalBoost: 1.45,
   /**
-   * How far past a canvas edge you can pan, as a fraction of the viewport.
-   * 0.5 ≈ bring that canvas edge to the viewport center (scales with screen + zoom).
+   * How far past the outermost images you can pan (screen px floor).
+   * Also grows with a small viewport fraction for larger screens.
    */
-  panClearanceX: 0.5,
-  panClearanceY: 0.62,
+  panPastImages: 112,
+  panPastImagesViewport: 0.1,
   /** Edge auto-pan band as a fraction of the shorter viewport side. */
   edgePanZoneFraction: 0.14,
   edgePanZoneMin: 64,
