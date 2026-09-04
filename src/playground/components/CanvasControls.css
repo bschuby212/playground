@@ -51,6 +51,12 @@
   background: rgba(26, 26, 26, 0.08);
 }
 
+.canvas-controls__views {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
 .canvas-controls__divider {
   width: 1px;
   height: 1rem;

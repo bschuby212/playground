@@ -13,7 +13,8 @@ import { playgroundProjects } from '../data/projects'
 import { getProximityScale } from '../hooks/proximityScale'
 import { getRevealOffset } from '../hooks/revealProject'
 import { useCanvasDrag } from '../hooks/useCanvasDrag'
-import { CanvasControls } from './CanvasControls'
+import { useCursorParallax } from '../hooks/useCursorParallax'
+import { CanvasControls, type ViewMode } from './CanvasControls'
 import { ProjectListOverlay } from './ProjectListOverlay'
 import { ProjectThumbnail } from './ProjectThumbnail'
 import './DraggableCanvas.css'
@@ -39,8 +40,8 @@ export function DraggableCanvas({
   onActiveProjectChange,
 }: DraggableCanvasProps) {
   const [layout, setLayout] = useState<LayoutMode>(playgroundConfig.defaultLayout)
+  const [viewMode, setViewMode] = useState<ViewMode>(playgroundConfig.defaultLayout)
   const [zoom, setZoom] = useState(playgroundConfig.defaultZoom)
-  const [listOpen, setListOpen] = useState(false)
   const [activeId, setActiveId] = useState<string | null>(null)
   const thumbNodesRef = useRef(new Map<string, HTMLAnchorElement>())
   const scalesRef = useRef<Record<string, number>>(
@@ -53,6 +54,7 @@ export function DraggableCanvas({
   const zoomRef = useRef(zoom)
 
   zoomRef.current = zoom
+  const listOpen = viewMode === 'list'
 
   const projects = useMemo(
     () => applyLayout(playgroundProjects, layout),
@@ -84,6 +86,13 @@ export function DraggableCanvas({
     reducedMotion,
     zoom,
     onPositionChange: handlePositionChange,
+  })
+
+  const { layerRef } = useCursorParallax({
+    enabled: playgroundConfig.enableCursorParallax && !touchMode && !listOpen,
+    reducedMotion,
+    isDragging,
+    containerRef,
   })
 
   const applyScaleToNode = useCallback(
@@ -227,15 +236,21 @@ export function DraggableCanvas({
     [onActiveProjectChange, projects, revealProject],
   )
 
-  const handleToggleLayout = useCallback(() => {
-    setLayout((current) => (current === 'scattered' ? 'bento' : 'scattered'))
-    setActiveId(null)
-    onActiveProjectChange(null)
-  }, [onActiveProjectChange])
+  const handleSelectView = useCallback(
+    (mode: ViewMode) => {
+      setViewMode(mode)
+      if (mode === 'list') return
 
-  const handleToggleList = useCallback(() => {
-    setListOpen((open) => !open)
-  }, [])
+      setLayout(mode)
+      setActiveId(null)
+      onActiveProjectChange(null)
+    },
+    [onActiveProjectChange],
+  )
+
+  const handleCloseList = useCallback(() => {
+    setViewMode(layout)
+  }, [layout])
 
   const handleLocateProject = useCallback(
     (id: string) => {
@@ -243,7 +258,7 @@ export function DraggableCanvas({
       const container = containerRef.current
       if (!project || !container) return
 
-      setListOpen(false)
+      setViewMode(layout)
       setActiveId(id)
       onActiveProjectChange(project.title)
 
@@ -254,7 +269,7 @@ export function DraggableCanvas({
       }
       animateTo(next, reducedMotion ? 0 : playgroundConfig.revealDurationMs)
     },
-    [animateTo, containerRef, onActiveProjectChange, projects, reducedMotion],
+    [animateTo, containerRef, layout, onActiveProjectChange, projects, reducedMotion],
   )
 
   const handleZoomIn = useCallback(() => {
@@ -310,37 +325,37 @@ export function DraggableCanvas({
       role="region"
       aria-label="Interactive project canvas. Drag to explore projects."
     >
-      <div ref={surfaceRef} className="draggable-canvas__surface" style={surfaceStyle}>
-        {projects.map((project) => (
-          <ProjectThumbnail
-            key={project.id}
-            project={project}
-            isActive={activeId === project.id}
-            reducedMotion={reducedMotion}
-            layoutMode={layout}
-            touchMode={touchMode}
-            onActivate={handleActivate}
-            shouldSuppressClick={shouldSuppressClick}
-            registerNode={registerThumb}
-          />
-        ))}
+      <div ref={layerRef} className="draggable-canvas__parallax">
+        <div ref={surfaceRef} className="draggable-canvas__surface" style={surfaceStyle}>
+          {projects.map((project) => (
+            <ProjectThumbnail
+              key={project.id}
+              project={project}
+              isActive={activeId === project.id}
+              reducedMotion={reducedMotion}
+              layoutMode={layout}
+              touchMode={touchMode}
+              onActivate={handleActivate}
+              shouldSuppressClick={shouldSuppressClick}
+              registerNode={registerThumb}
+            />
+          ))}
+        </div>
       </div>
 
       <ProjectListOverlay
         projects={projects}
         open={listOpen}
-        onClose={() => setListOpen(false)}
+        onClose={handleCloseList}
         onSelect={handleLocateProject}
       />
 
       <CanvasControls
-        layout={layout}
+        viewMode={viewMode}
         zoom={zoom}
         minZoom={playgroundConfig.minZoom}
         maxZoom={playgroundConfig.maxZoom}
-        listOpen={listOpen}
-        onToggleList={handleToggleList}
-        onToggleLayout={handleToggleLayout}
+        onSelectView={handleSelectView}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
       />
