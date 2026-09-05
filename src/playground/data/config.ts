@@ -1,4 +1,5 @@
 export const playgroundConfig = {
+  tagline: 'Design experiments using AI, code, and emerging tools',
   defaultHint: 'Hover Thumbnails',
   mobileHint: 'Tap Thumbnails',
   mobileDetailHint: 'Double tap to open',

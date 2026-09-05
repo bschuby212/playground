@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { playgroundConfig } from '../data/config'
 import type { ToolMeta } from '../data/tools'
 import './PlaygroundHeader.css'
 
@@ -136,7 +137,10 @@ export function PlaygroundHeader({
 
   return (
     <header className="playground-header">
-      <h1 className="playground-header__title">Design Playground</h1>
+      <div className="playground-header__brand">
+        <h1 className="playground-header__title">Design Playground</h1>
+        <p className="playground-header__tagline">{playgroundConfig.tagline}</p>
+      </div>
       <div
         className={[
           'playground-header__meta',
