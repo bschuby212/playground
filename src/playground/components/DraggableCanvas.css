@@ -1,9 +1,9 @@
 .draggable-canvas {
   position: relative;
   width: 100%;
-  height: clamp(18rem, 72vh, 48rem);
+  height: 42rem;
   overflow: hidden;
-  border-radius: clamp(0.75rem, 1.5vw, 1.125rem);
+  border-radius: 1.125rem;
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -41,20 +41,42 @@
   background: transparent;
 }
 
-@media (max-width: 768px) {
-  .draggable-canvas {
-    height: clamp(16rem, 64vh, 36rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .draggable-canvas {
-    height: clamp(15rem, 60vh, 28rem);
-  }
-}
-
+/* Large desktop */
 @media (min-width: 1400px) {
   .draggable-canvas {
-    height: clamp(28rem, 74vh, 52rem);
+    height: 48rem;
+    border-radius: 1.25rem;
+  }
+}
+
+/* Laptop / small desktop */
+@media (max-width: 1100px) {
+  .draggable-canvas {
+    height: 36rem;
+    border-radius: 1rem;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .draggable-canvas {
+    height: 28rem;
+    border-radius: 0.875rem;
+  }
+}
+
+/* Large phone */
+@media (max-width: 540px) {
+  .draggable-canvas {
+    height: 24rem;
+    border-radius: 0.75rem;
+  }
+}
+
+/* Small phone */
+@media (max-width: 400px) {
+  .draggable-canvas {
+    height: 20rem;
+    border-radius: 0.625rem;
   }
 }
