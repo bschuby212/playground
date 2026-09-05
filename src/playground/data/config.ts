@@ -1,7 +1,7 @@
 export const playgroundConfig = {
   defaultHint: 'Hover thumbnail for info',
   mobileHint: 'Double tap to view project',
-  openLinksInNewTab: false,
+  openLinksInNewTab: true,
   enableProximityScaling: true,
   enableMomentum: false,
   enableHoverReveal: false,
