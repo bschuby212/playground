@@ -1,9 +1,11 @@
+import type { ToolId } from './tools'
+
 export type PlaygroundProject = {
   id: string
   title: string
   description: string
   skill: string
-  tool: string
+  tools: ToolId[]
   image: string
   href: string
   x: number
@@ -31,7 +33,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Saturday Design System',
     description: 'MCP design system for AI-assisted workflows.',
     skill: 'Design systems',
-    tool: 'Figma',
+    tools: ['figma', 'claude', 'cursor'],
     image: '/projects/saturday-design-system.png',
     href: 'https://blakeschubert.com/saturday-design-system',
     x: 180,
@@ -45,7 +47,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Blossom',
     description: 'Healthcare SaaS landing and product concept.',
     skill: 'Web',
-    tool: 'Figma',
+    tools: ['figma', 'openai'],
     image: '/projects/blossom.png',
     href: 'https://blakeschubert.com/blossom',
     x: 720,
@@ -59,7 +61,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Glyph',
     description: 'Toolkit for building and testing interface styles.',
     skill: 'Product UI',
-    tool: 'Figma',
+    tools: ['figma', 'openai'],
     image: '/projects/glyph.png',
     href: 'https://blakeschubert.com/glpyh',
     x: 1140,
@@ -73,7 +75,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Digital Bookshelf',
     description: 'Digital bookshelf of favorite reads.',
     skill: 'Editorial',
-    tool: 'Figma',
+    tools: ['spline', 'openai'],
     image: '/projects/bookshelf.png',
     href: 'https://blakeschubert.com/digital-bookshelf',
     x: 1480,
@@ -87,7 +89,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Buddy the Brave',
     description: 'Interactive 3D card exploring web interactions.',
     skill: 'Illustration',
-    tool: 'Midjourney',
+    tools: ['claude', 'cursor'],
     image: '/projects/buddy-the-brave.png',
     href: 'https://blakeschubert.com/buddy',
     x: 1920,
@@ -101,7 +103,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'RetroTV',
     description: 'Retro TV for classic cartoons and nostalgia.',
     skill: '3D',
-    tool: 'Blender',
+    tools: ['spline', 'openai'],
     image: '/projects/retrotv.png',
     href: 'https://blakeschubert.com/retrotv',
     x: 220,
@@ -115,7 +117,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Inspo',
     description: 'Personal archive for standout UI inspiration.',
     skill: 'Research',
-    tool: 'Figma',
+    tools: ['spline', 'openai'],
     image: '/projects/design-references.png',
     href: 'https://blakeschubert.com/inspo',
     x: 560,
@@ -129,7 +131,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Invoice Studio',
     description: 'Create, send, and track client invoices.',
     skill: 'Product UI',
-    tool: 'Cursor',
+    tools: ['cursor', 'openai'],
     image: '/projects/invoice-studio.png',
     href: 'https://blakeschubert.com/invoicegenerator',
     x: 1120,
@@ -143,7 +145,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     title: 'Robot Animation',
     description: 'AI avatars exploring character design and motion.',
     skill: 'Motion',
-    tool: 'After Effects',
+    tools: ['midjourney', 'openai', 'claude'],
     image: '/projects/robot-animation.png',
     href: 'https://blakeschubert.com/robot-animation',
     x: 1680,
