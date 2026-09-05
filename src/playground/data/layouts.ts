@@ -26,14 +26,14 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
  * Zigzag left/right so it still reads as a playground, not a grid.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
-  // Row 1
-  'project-02': { x: 24, y: 64, width: 200, height: 136 },
-  'project-03': { x: 248, y: 112, width: 220, height: 148 },
-  'project-05': { x: 500, y: 48, width: 156, height: 216 },
+  // Row 1 — sizes ~1.1× prior mobile thumbs
+  'project-02': { x: 24, y: 64, width: 220, height: 150 },
+  'project-03': { x: 268, y: 118, width: 242, height: 163 },
+  'project-05': { x: 540, y: 48, width: 172, height: 238 },
   // Row 2
-  'project-06': { x: 48, y: 360, width: 200, height: 136 },
-  'project-07': { x: 272, y: 408, width: 220, height: 148 },
-  'project-09': { x: 520, y: 332, width: 176, height: 176 },
+  'project-06': { x: 48, y: 390, width: 220, height: 150 },
+  'project-07': { x: 292, y: 442, width: 242, height: 163 },
+  'project-09': { x: 560, y: 360, width: 194, height: 194 },
 }
 
 /**

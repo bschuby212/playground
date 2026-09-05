@@ -77,9 +77,9 @@
 }
 
 .playground-header__text {
-  flex: 0 1 auto;
-  width: auto;
-  max-width: 100%;
+  flex: 0 0 auto;
+  width: fit-content;
+  max-width: min(320px, 100%);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   font-weight: 400;
@@ -100,7 +100,7 @@
   flex-shrink: 0;
   align-items: center;
   gap: 4px;
-  margin-left: 2px;
+  margin-left: 0;
 }
 
 .playground-header__tool {
@@ -111,17 +111,47 @@
   object-fit: cover;
 }
 
-/* Touch / compact: allow description to wrap; click icon signals double-tap */
+/*
+ * Touch / compact project state:
+ * icon | copy
+ *       tools (below copy, right-aligned)
+ */
 .playground-header__meta.is-touch.is-project {
-  align-items: flex-start;
-  max-width: min(320px, 58vw);
+  display: grid;
+  grid-template-columns: auto minmax(0, max-content);
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  row-gap: 6px;
+  align-items: start;
+  justify-content: end;
+  max-width: min(280px, 58vw);
 }
 
 .playground-header__meta.is-touch.is-project .playground-header__icon {
+  grid-column: 1;
+  grid-row: 1;
   margin-top: 0.15rem;
 }
 
-.playground-header__meta.is-touch.is-project .playground-header__text,
+.playground-header__meta.is-touch.is-project .playground-header__text {
+  grid-column: 2;
+  grid-row: 1;
+  width: auto;
+  max-width: 100%;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.playground-header__meta.is-touch.is-project .playground-header__tools {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  margin-left: 0;
+}
+
 .playground-header__meta.is-touch .playground-header__text {
   white-space: normal;
   overflow: visible;
@@ -136,23 +166,40 @@
   }
 
   .playground-header__meta {
-    max-width: min(320px, 58vw);
+    max-width: min(280px, 58vw);
   }
 
   .playground-header__meta.is-project {
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: auto minmax(0, max-content);
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    row-gap: 6px;
+    align-items: start;
   }
 
   .playground-header__meta.is-project .playground-header__icon {
+    grid-column: 1;
+    grid-row: 1;
     margin-top: 0.15rem;
   }
 
-  .playground-header__text {
+  .playground-header__meta.is-project .playground-header__text {
+    grid-column: 2;
+    grid-row: 1;
     font-size: max(12px, calc(var(--text-body) - 1px));
+    width: auto;
+    max-width: 100%;
     white-space: normal;
     overflow: visible;
     text-overflow: unset;
     overflow-wrap: break-word;
     word-wrap: break-word;
+  }
+
+  .playground-header__meta.is-project .playground-header__tools {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
   }
 }
