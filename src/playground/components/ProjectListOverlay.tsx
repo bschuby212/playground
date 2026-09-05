@@ -125,10 +125,6 @@ export function ProjectListOverlay({
     >
       <div className="project-list-overlay__panel">
         <header className="project-list-overlay__header">
-          <div>
-            <p className="project-list-overlay__eyebrow">Index</p>
-            <h2 className="project-list-overlay__title">All projects</h2>
-          </div>
           <button
             type="button"
             className="project-list-overlay__close"

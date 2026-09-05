@@ -81,8 +81,10 @@ function ProjectThumbnailComponent({
         return
       }
 
+      // Desktop (≥1000px, fine pointer): single click opens the Framer case study.
       if (!touchMode) return
 
+      // Mobile / tablet: no hover — first tap shows details, second tap opens.
       const now = performance.now()
       const last = lastTapRef.current
       const isDoubleTap =
@@ -91,7 +93,6 @@ function ProjectThumbnailComponent({
         now - last.time <= playgroundConfig.doubleTapMs
 
       if (isDoubleTap) {
-        // Second tap opens the project URL (placeholder # for now)
         lastTapRef.current = null
         return
       }

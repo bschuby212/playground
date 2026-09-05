@@ -324,9 +324,16 @@ export function DraggableCanvas({
   const handleCanvasPointerDown = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
       const target = event.target as HTMLElement
-      if (touchMode && !target.closest('[data-project-id], .canvas-controls')) {
+      const onThumbnail = Boolean(target.closest('[data-project-id]'))
+
+      if (touchMode && !onThumbnail && !target.closest('.canvas-controls')) {
         handleActivate(null)
       }
+
+      // Desktop: don't capture/drag from thumbnails so a single click opens the link.
+      // Touch/tablet: still allow pan-from-thumb; click handler gates open to double-tap.
+      if (!touchMode && onThumbnail) return
+
       handlePointerDown(event)
     },
     [handleActivate, handlePointerDown, touchMode],
