@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
 import { playgroundConfig } from '../data/config'
+import { useIsStandalone } from '../hooks/useIsStandalone'
 import './FullscreenOpenButton.css'
 
 function ExpandIcon() {
@@ -23,22 +23,24 @@ function ExpandIcon() {
   )
 }
 
-/** Desktop-only (≥1000px): pinned control that opens the live site fullscreen. */
+/**
+ * ≥1000px + Framer embed only: open the live Netlify/site URL as a natural
+ * full page in a new tab (not as another embed).
+ */
 export function FullscreenOpenButton() {
-  // Prefer the current build URL so Framer embeds open the same deploy in a real tab.
-  const href = useMemo(() => {
-    if (typeof window === 'undefined') return playgroundConfig.siteUrl
-    return window.location.href.split('#')[0] || playgroundConfig.siteUrl
-  }, [])
+  const isStandalone = useIsStandalone()
+
+  // Already on the natural full page — no need for the escape hatch
+  if (isStandalone) return null
 
   return (
     <a
       className="fullscreen-open"
-      href={href}
+      href={playgroundConfig.siteUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Open fullscreen"
-      title="Open fullscreen"
+      aria-label="Open fullscreen page"
+      title="Open fullscreen page"
     >
       <ExpandIcon />
       <span className="fullscreen-open__label">Fullscreen</span>
