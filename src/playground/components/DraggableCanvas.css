@@ -1,9 +1,7 @@
 .draggable-canvas {
   position: relative;
   width: 100%;
-  height: 42rem;
   overflow: hidden;
-  border-radius: 1.125rem;
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -41,23 +39,22 @@
   background: transparent;
 }
 
-/* Large desktop */
-@media (min-width: 1400px) {
+/* Desktop and up — fluid */
+@media (min-width: 1200px) {
   .draggable-canvas {
-    height: 48rem;
-    border-radius: 1.25rem;
+    height: clamp(28rem, 72vh, 52rem);
+    border-radius: clamp(1rem, 1.4vw, 1.25rem);
   }
 }
 
-/* Laptop / small desktop */
-@media (max-width: 1100px) {
+/* Below 1200 — fixed tablet / phone sizes */
+@media (max-width: 1199px) {
   .draggable-canvas {
     height: 36rem;
     border-radius: 1rem;
   }
 }
 
-/* Tablet */
 @media (max-width: 768px) {
   .draggable-canvas {
     height: 28rem;
@@ -65,7 +62,6 @@
   }
 }
 
-/* Large phone */
 @media (max-width: 540px) {
   .draggable-canvas {
     height: 24rem;
@@ -73,7 +69,6 @@
   }
 }
 
-/* Small phone */
 @media (max-width: 400px) {
   .draggable-canvas {
     height: 20rem;
