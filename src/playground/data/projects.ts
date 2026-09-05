@@ -29,7 +29,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-01',
     title: 'Saturday Design System',
-    description: 'MCP design system exploring AI-assisted workflows.',
+    description: 'MCP design system for AI-assisted workflows.',
     skill: 'Design systems',
     tool: 'Figma',
     image: '/projects/saturday-design-system.png',
@@ -43,7 +43,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-02',
     title: 'Blossom',
-    description: 'Landing page and product concept for a healthcare SaaS.',
+    description: 'Healthcare SaaS landing and product concept.',
     skill: 'Web',
     tool: 'Figma',
     image: '/projects/blossom.png',
@@ -57,7 +57,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-03',
     title: 'Glyph',
-    description: 'Design toolkit for building and testing interface styles.',
+    description: 'Toolkit for building and testing interface styles.',
     skill: 'Product UI',
     tool: 'Figma',
     image: '/projects/glyph.png',
@@ -85,7 +85,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-05',
     title: 'Buddy the Brave',
-    description: 'Interactive 3D playing card exploring web interactions.',
+    description: 'Interactive 3D card exploring web interactions.',
     skill: 'Illustration',
     tool: 'Midjourney',
     image: '/projects/buddy-the-brave.png',
@@ -141,7 +141,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-09',
     title: 'Robot Animation',
-    description: 'AI avatar set exploring character design and motion.',
+    description: 'AI avatars exploring character design and motion.',
     skill: 'Motion',
     tool: 'After Effects',
     image: '/projects/robot-animation.png',
