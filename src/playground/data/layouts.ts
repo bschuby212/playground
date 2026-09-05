@@ -22,7 +22,7 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
 }
 
 /**
- * Phone / tablet — two staggered rows of three (6 projects).
+ * Phone / tablet canvas (scattered) — two staggered rows of three (6 projects).
  * Zigzag left/right so it still reads as a playground, not a grid.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
@@ -35,6 +35,40 @@ export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
   'project-07': { x: 388, y: 600, width: 352, height: 236 },
   'project-09': { x: 780, y: 500, width: 281, height: 281 },
 }
+
+/**
+ * Phone / tablet grid (bento) — clean 2×3 pseudo-square tiles.
+ * Snaps into a compact block; canvas view restores the staggered spread.
+ */
+export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
+  const ids = [
+    'project-02',
+    'project-03',
+    'project-05',
+    'project-06',
+    'project-07',
+    'project-09',
+  ] as const
+  const cell = 168
+  const gap = 12
+  const cols = 2
+  const originX = 16
+  const originY = 24
+  const layout: Record<string, LayoutPlacement> = {}
+
+  ids.forEach((id, index) => {
+    const col = index % cols
+    const row = Math.floor(index / cols)
+    layout[id] = {
+      x: originX + col * (cell + gap),
+      y: originY + row * (cell + gap),
+      width: cell,
+      height: cell,
+    }
+  })
+
+  return layout
+})()
 
 /**
  * Clean bento rows — three rows for the current 9-item set.
@@ -82,11 +116,12 @@ export const layouts: Record<LayoutMode, Record<string, LayoutPlacement>> = {
 export function applyLayout(
   projects: PlaygroundProject[],
   mode: LayoutMode,
-  options?: { mobileVertical?: boolean },
+  options?: { mobileViewport?: boolean },
 ): PlaygroundProject[] {
-  const placement = options?.mobileVertical
-    ? mobileVerticalLayout
-    : layouts[mode]
+  let placement = layouts[mode]
+  if (options?.mobileViewport) {
+    placement = mode === 'bento' ? mobileBentoLayout : mobileVerticalLayout
+  }
 
   return projects.map((project) => {
     const next = placement[project.id]

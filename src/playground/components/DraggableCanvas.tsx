@@ -75,7 +75,7 @@ export function DraggableCanvas({
     const source = mobileViewport
       ? playgroundProjects.filter((project) => project.showOnMobile)
       : playgroundProjects
-    return applyLayout(source, layout, { mobileVertical: mobileViewport })
+    return applyLayout(source, layout, { mobileViewport })
   }, [layout, mobileViewport])
 
   // Clear selection if the active project was filtered out on resize
@@ -285,8 +285,17 @@ export function DraggableCanvas({
       setLayout(mode)
       setActiveId(null)
       onActiveProjectChange(null)
+
+      // Mobile: snap pan back so grid / spread lands cleanly in view
+      if (mobileViewport) {
+        setZoom(1)
+        applyPosition({
+          x: playgroundConfig.mobileStartingX,
+          y: playgroundConfig.mobileStartingY,
+        })
+      }
     },
-    [onActiveProjectChange],
+    [applyPosition, mobileViewport, onActiveProjectChange],
   )
 
   const handleCloseList = useCallback(() => {
