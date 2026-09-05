@@ -22,13 +22,13 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
 }
 
 /**
- * Phone / thin embed — vertical stack with light left-right stagger
- * so pan is mostly up/down on narrow screens.
+ * Phone / tablet — mostly vertical, but heavily staggered left/right
+ * so it still reads as a playground, not a straight column.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
-  'project-06': { x: 72, y: 120, width: 300, height: 204 },
-  'project-07': { x: 36, y: 380, width: 320, height: 216 },
-  'project-09': { x: 88, y: 660, width: 260, height: 260 },
+  'project-06': { x: 28, y: 80, width: 280, height: 190 },
+  'project-07': { x: 150, y: 310, width: 300, height: 202 },
+  'project-09': { x: 40, y: 560, width: 240, height: 240 },
 }
 
 /**
