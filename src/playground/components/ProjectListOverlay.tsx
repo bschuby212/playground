@@ -124,16 +124,14 @@ export function ProjectListOverlay({
       aria-label="Playground projects"
     >
       <div className="project-list-overlay__panel">
-        <header className="project-list-overlay__header">
-          <button
-            type="button"
-            className="project-list-overlay__close"
-            onClick={onClose}
-            aria-label="Close project list"
-          >
-            Close
-          </button>
-        </header>
+        <button
+          type="button"
+          className="project-list-overlay__close"
+          onClick={onClose}
+          aria-label="Close project list"
+        >
+          Close
+        </button>
 
         <div className="project-list-overlay__table" role="table">
           <div className="project-list-overlay__row is-head" role="row">

@@ -1,7 +1,7 @@
 export type ToolId =
   | 'figma'
   | 'openai'
-  | 'claude'
+  | 'gemini'
   | 'cursor'
   | 'spline'
   | 'midjourney'
@@ -23,10 +23,10 @@ export const toolCatalog: Record<ToolId, ToolMeta> = {
     label: 'ChatGPT',
     icon: '/tools/openai.png',
   },
-  claude: {
-    id: 'claude',
-    label: 'Claude',
-    icon: '/tools/claude.png',
+  gemini: {
+    id: 'gemini',
+    label: 'Gemini',
+    icon: '/tools/gemini.png',
   },
   cursor: {
     id: 'cursor',
