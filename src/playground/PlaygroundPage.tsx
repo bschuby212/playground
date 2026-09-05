@@ -46,7 +46,7 @@ export function PlaygroundPage() {
           reducedMotion={reducedMotion}
           enableProximityScaling={enableProximityScaling}
           touchMode={touchMode}
-          mobileViewport={isCompactViewport}
+          mobileViewport={touchMode}
           onActiveProjectChange={handleActiveProjectChange}
         />
       </div>

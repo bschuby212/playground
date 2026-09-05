@@ -149,11 +149,13 @@ export function PlaygroundHeader({
           .join(' ')}
         aria-live="polite"
       >
-        <span className="playground-header__icon" aria-hidden="true">
-          {showingHint ? <PointerIcon /> : activeIcon}
+        <span className="playground-header__copy">
+          <span className="playground-header__icon" aria-hidden="true">
+            {showingHint ? <PointerIcon /> : activeIcon}
+          </span>
+          <span className="playground-header__text">{renderedText}</span>
         </span>
-        <span className="playground-header__text">{renderedText}</span>
-        {!showingHint && renderedTools.length > 0 ? (
+        {!showingHint && !touchMode && renderedTools.length > 0 ? (
           <span className="playground-header__tools" aria-hidden="true">
             {renderedTools.map((tool) => (
               <img
