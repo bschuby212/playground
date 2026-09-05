@@ -1,6 +1,6 @@
 .playground-header {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
   gap: clamp(0.75rem, 2vw, 1.5rem);
   width: 100%;
@@ -12,7 +12,8 @@
 
 .playground-header__title {
   margin: 0;
-  padding-top: 0.2rem;
+  padding-top: 0;
+  padding-bottom: 0.05rem;
   font-family: var(--font-display);
   font-size: var(--text-h1);
   font-weight: 400;
@@ -25,7 +26,7 @@
 /* Shrink-wrap to the copy; stay flush to the right edge */
 .playground-header__meta {
   display: inline-flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: flex-end;
   gap: 0.4rem;
   margin-left: auto;
