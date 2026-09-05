@@ -22,13 +22,18 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
 }
 
 /**
- * Phone / tablet — mostly vertical, but heavily staggered left/right
- * so it still reads as a playground, not a straight column.
+ * Phone / tablet — two staggered rows of three (6 projects).
+ * Zigzag left/right so it still reads as a playground, not a grid.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
-  'project-06': { x: 28, y: 80, width: 280, height: 190 },
-  'project-07': { x: 150, y: 310, width: 300, height: 202 },
-  'project-09': { x: 40, y: 560, width: 240, height: 240 },
+  // Row 1
+  'project-02': { x: 24, y: 64, width: 200, height: 136 },
+  'project-03': { x: 248, y: 112, width: 220, height: 148 },
+  'project-05': { x: 500, y: 48, width: 156, height: 216 },
+  // Row 2
+  'project-06': { x: 48, y: 360, width: 200, height: 136 },
+  'project-07': { x: 272, y: 408, width: 220, height: 148 },
+  'project-09': { x: 520, y: 332, width: 176, height: 176 },
 }
 
 /**

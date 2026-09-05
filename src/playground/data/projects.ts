@@ -54,7 +54,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 120,
     ...thumbnailSizes.medium,
     alt: 'Blossom healthcare platform hero',
-    showOnMobile: false,
+    showOnMobile: true,
   },
   {
     id: 'project-03',
@@ -68,7 +68,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 240,
     ...thumbnailSizes.large,
     alt: 'Glyph design toolkit workspace',
-    showOnMobile: false,
+    showOnMobile: true,
   },
   {
     id: 'project-04',
@@ -96,7 +96,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 280,
     ...thumbnailSizes.tall,
     alt: 'Buddy the Brave trading card',
-    showOnMobile: false,
+    showOnMobile: true,
   },
   {
     id: 'project-06',
