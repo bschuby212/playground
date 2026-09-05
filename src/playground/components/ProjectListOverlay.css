@@ -61,7 +61,7 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: 0.15rem 0.55rem 0.45rem;
+  padding: 0.15rem 0.55rem 0.45rem 1.55rem;
   scrollbar-width: thin;
 }
 
