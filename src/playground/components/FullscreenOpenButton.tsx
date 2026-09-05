@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { playgroundConfig } from '../data/config'
 import './FullscreenOpenButton.css'
 
@@ -24,10 +25,16 @@ function ExpandIcon() {
 
 /** Desktop-only (≥1000px): pinned control that opens the live site fullscreen. */
 export function FullscreenOpenButton() {
+  // Prefer the current build URL so Framer embeds open the same deploy in a real tab.
+  const href = useMemo(() => {
+    if (typeof window === 'undefined') return playgroundConfig.siteUrl
+    return window.location.href.split('#')[0] || playgroundConfig.siteUrl
+  }, [])
+
   return (
     <a
       className="fullscreen-open"
-      href={playgroundConfig.siteUrl}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Open fullscreen"
