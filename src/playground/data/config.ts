@@ -47,9 +47,9 @@ export const playgroundConfig = {
   touchDragThreshold: 10,
   startingX: -380,
   startingY: -220,
-  /** Phone / tablet start — top of the vertical stack. */
-  mobileStartingX: -24,
-  mobileStartingY: -48,
+  /** Phone / tablet start — tight crop so more projects show by default. */
+  mobileStartingX: -8,
+  mobileStartingY: -12,
   revealPadding: 56,
   revealDurationMs: 340,
   revealMaxNudge: 140,

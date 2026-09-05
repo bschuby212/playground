@@ -23,17 +23,17 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
 
 /**
  * Phone / tablet canvas (scattered) — two staggered rows of three (6 projects).
- * Zigzag left/right so it still reads as a playground, not a grid.
+ * Packed tighter so more shows by default in the 640 mobile frame.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
-  // Row 1 — ~1.2× larger mobile thumbs
-  'project-02': { x: 16, y: 48, width: 319, height: 218 },
-  'project-03': { x: 360, y: 120, width: 352, height: 236 },
-  'project-05': { x: 740, y: 32, width: 250, height: 346 },
-  // Row 2
-  'project-06': { x: 40, y: 520, width: 319, height: 218 },
-  'project-07': { x: 388, y: 600, width: 352, height: 236 },
-  'project-09': { x: 780, y: 500, width: 281, height: 281 },
+  // Row 1
+  'project-02': { x: 12, y: 20, width: 268, height: 184 },
+  'project-03': { x: 292, y: 56, width: 292, height: 196 },
+  'project-05': { x: 600, y: 12, width: 210, height: 290 },
+  // Row 2 — pulled up so both rows read in the first viewport
+  'project-06': { x: 20, y: 320, width: 268, height: 184 },
+  'project-07': { x: 304, y: 360, width: 292, height: 196 },
+  'project-09': { x: 612, y: 300, width: 236, height: 236 },
 }
 
 /**
@@ -49,11 +49,11 @@ export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
     'project-07',
     'project-09',
   ] as const
-  const cell = 168
-  const gap = 12
+  const cell = 152
+  const gap = 10
   const cols = 2
-  const originX = 16
-  const originY = 24
+  const originX = 12
+  const originY = 16
   const layout: Record<string, LayoutPlacement> = {}
 
   ids.forEach((id, index) => {

@@ -7,8 +7,8 @@
 }
 
 :root {
-  --page-bg: #ffffff;
-  --canvas-bg: #ffffff;
+  --page-bg: #fcfcfc;
+  --canvas-bg: #fcfcfc;
   --grid-line: rgba(26, 26, 26, 0.06);
   --grid-size: 32px;
   --color-text: #111111;
