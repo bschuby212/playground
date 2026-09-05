@@ -1,7 +1,5 @@
 export const playgroundConfig = {
   tagline: 'Design experiments using AI, code, and emerging tools',
-  /** Live site opened by the desktop fullscreen button (Framer → new tab). */
-  siteUrl: 'https://design-playground-framer.netlify.app',
   defaultHint: 'Hover Thumbnails',
   mobileHint: 'Tap Thumbnails',
   mobileDetailHint: 'Double tap to open',

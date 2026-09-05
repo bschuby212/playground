@@ -5,10 +5,8 @@ import {
   type ActiveProjectMeta,
 } from './components/PlaygroundHeader'
 import { DraggableCanvas } from './components/DraggableCanvas'
-import { FullscreenOpenButton } from './components/FullscreenOpenButton'
 import { useCompactViewport } from './hooks/useCompactViewport'
 import { useIsCoarsePointer } from './hooks/useIsCoarsePointer'
-import { useIsStandalone } from './hooks/useIsStandalone'
 import { useNarrowMobile } from './hooks/useNarrowMobile'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import './PlaygroundPage.css'
@@ -18,7 +16,6 @@ export function PlaygroundPage() {
   const isCoarsePointer = useIsCoarsePointer()
   const isCompactViewport = useCompactViewport()
   const isNarrowMobile = useNarrowMobile()
-  const isStandalone = useIsStandalone()
   const [activeProject, setActiveProject] = useState<ActiveProjectMeta | null>(null)
 
   // Under 1000px (and coarse pointers): touch-first — no cursor-follow, clearer tap vs pan
@@ -37,11 +34,7 @@ export function PlaygroundPage() {
   }, [])
 
   return (
-    <main
-      className={['playground-page', isStandalone ? 'is-standalone' : 'is-embed'].join(
-        ' ',
-      )}
-    >
+    <main className="playground-page">
       <div className="playground-page__frame">
         <PlaygroundHeader
           hint={defaultHint}
@@ -57,7 +50,6 @@ export function PlaygroundPage() {
           onActiveProjectChange={handleActiveProjectChange}
         />
       </div>
-      <FullscreenOpenButton />
     </main>
   )
 }
