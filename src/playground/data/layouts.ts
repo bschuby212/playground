@@ -8,18 +8,75 @@ export type LayoutPlacement = {
   height: number
 }
 
-/** Organic scattered placement — freeform composition for nine projects. */
-export const scatteredLayout: Record<string, LayoutPlacement> = {
-  'project-01': { x: 140, y: 160, ...thumbnailSizes.large },
-  'project-02': { x: 680, y: 100, ...thumbnailSizes.medium },
-  'project-03': { x: 1100, y: 180, ...thumbnailSizes.large },
-  'project-04': { x: 1660, y: 120, ...thumbnailSizes.medium },
-  'project-05': { x: 2080, y: 380, ...thumbnailSizes.tall },
-  'project-06': { x: 180, y: 540, ...thumbnailSizes.medium },
-  'project-07': { x: 600, y: 540, ...thumbnailSizes.large },
-  'project-08': { x: 1160, y: 560, ...thumbnailSizes.large },
-  'project-09': { x: 1720, y: 620, ...thumbnailSizes.square },
+type SizedItem = {
+  id: string
+  size: keyof typeof thumbnailSizes
 }
+
+/**
+ * Place items on an ellipse around the canvas center.
+ * One piece sits in the middle; the rest orbit in a ring.
+ */
+function buildCircularLayout(
+  center: SizedItem,
+  ring: SizedItem[],
+  options: {
+    cx: number
+    cy: number
+    radiusX: number
+    radiusY: number
+    startAngleDeg?: number
+  },
+): Record<string, LayoutPlacement> {
+  const { cx, cy, radiusX, radiusY, startAngleDeg = -90 } = options
+  const layout: Record<string, LayoutPlacement> = {}
+
+  const centerSize = thumbnailSizes[center.size]
+  layout[center.id] = {
+    x: Math.round(cx - centerSize.width / 2),
+    y: Math.round(cy - centerSize.height / 2),
+    ...centerSize,
+  }
+
+  const count = ring.length
+  ring.forEach((item, index) => {
+    const size = thumbnailSizes[item.size]
+    const angle = ((startAngleDeg + (360 / count) * index) * Math.PI) / 180
+    // Slight radius wobble keeps the ring from reading as a rigid oval
+    const wobble = 1 + (((index % 3) - 1) * 0.04)
+    const px = cx + radiusX * wobble * Math.cos(angle)
+    const py = cy + radiusY * wobble * Math.sin(angle)
+    layout[item.id] = {
+      x: Math.round(px - size.width / 2),
+      y: Math.round(py - size.height / 2),
+      ...size,
+    }
+  })
+
+  return layout
+}
+
+/** Circular scattered placement — ring around a center piece. */
+export const scatteredLayout: Record<string, LayoutPlacement> = buildCircularLayout(
+  { id: 'project-09', size: 'square' },
+  [
+    { id: 'project-01', size: 'large' },
+    { id: 'project-02', size: 'medium' },
+    { id: 'project-03', size: 'large' },
+    { id: 'project-04', size: 'medium' },
+    { id: 'project-05', size: 'tall' },
+    { id: 'project-06', size: 'medium' },
+    { id: 'project-07', size: 'large' },
+    { id: 'project-08', size: 'large' },
+  ],
+  {
+    cx: 1200,
+    cy: 900,
+    radiusX: 820,
+    radiusY: 560,
+    startAngleDeg: -90,
+  },
+)
 
 /**
  * Clean bento rows — three rows for the current 9-item set.
@@ -36,7 +93,17 @@ export const bentoLayout: Record<string, LayoutPlacement> = (() => {
     ['medium', 'large', 'tall'],
   ]
 
-  const ids = Object.keys(scatteredLayout)
+  const ids = [
+    'project-01',
+    'project-02',
+    'project-03',
+    'project-04',
+    'project-05',
+    'project-06',
+    'project-07',
+    'project-08',
+    'project-09',
+  ]
   const layout: Record<string, LayoutPlacement> = {}
   let index = 0
   let y = originY
