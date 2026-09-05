@@ -13,6 +13,8 @@ export const playgroundConfig = {
   parallaxCenterGain: 0.16,
   /** Radius (fraction of half-viewport) that stays in the gentle center band. */
   parallaxCenterSoftZone: 0.55,
+  /** Extra multiplier on horizontal move-to-pan (~18% faster left/right). */
+  parallaxHorizontalBoost: 1.18,
   /** Extra multiplier on vertical move-to-pan (viewport is shorter than wide). */
   parallaxVerticalBoost: 1.45,
   /**
