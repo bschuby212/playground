@@ -29,7 +29,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-01',
     title: 'Saturday Design System',
-    description: 'Foundations and components built end-to-end in a weekend.',
+    description: 'MCP design system exploring AI-assisted workflows.',
     skill: 'Design systems',
     tool: 'Figma',
     image: '/projects/saturday-design-system.png',
@@ -43,7 +43,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-02',
     title: 'Blossom',
-    description: 'Healthcare landing that keeps care aligned from start to finish.',
+    description: 'Landing page and product concept for a healthcare SaaS.',
     skill: 'Web',
     tool: 'Figma',
     image: '/projects/blossom.png',
@@ -57,7 +57,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-03',
     title: 'Glyph',
-    description: 'Toolkit for generating styles, reviewing type, and finding references.',
+    description: 'Design toolkit for building and testing interface styles.',
     skill: 'Product UI',
     tool: 'Figma',
     image: '/projects/glyph.png',
@@ -71,7 +71,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-04',
     title: 'Digital Bookshelf',
-    description: 'A quiet shelf of design books and references to pull from.',
+    description: 'Digital bookshelf of favorite reads.',
     skill: 'Editorial',
     tool: 'Figma',
     image: '/projects/bookshelf.png',
@@ -85,7 +85,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-05',
     title: 'Buddy the Brave',
-    description: 'Collectible card for a legendary pet cuddler with veil of night.',
+    description: 'Interactive 3D playing card exploring web interactions.',
     skill: 'Illustration',
     tool: 'Midjourney',
     image: '/projects/buddy-the-brave.png',
@@ -99,7 +99,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-06',
     title: 'RetroTV',
-    description: 'Skeuomorphic CRT set tuned to a classic Pokémon broadcast.',
+    description: 'Retro TV for classic cartoons and nostalgia.',
     skill: '3D',
     tool: 'Blender',
     image: '/projects/retrotv.png',
@@ -113,7 +113,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-07',
     title: 'Inspo',
-    description: 'Searchable gallery of mobile apps, landings, and onboarding flows.',
+    description: 'Personal archive for standout UI inspiration.',
     skill: 'Research',
     tool: 'Figma',
     image: '/projects/design-references.png',
@@ -127,7 +127,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-08',
     title: 'Invoice Studio',
-    description: 'Live invoice builder with form inputs and PDF-ready preview.',
+    description: 'Create, send, and track client invoices.',
     skill: 'Product UI',
     tool: 'Cursor',
     image: '/projects/invoice-studio.png',
@@ -141,7 +141,7 @@ export const playgroundProjects: PlaygroundProject[] = [
   {
     id: 'project-09',
     title: 'Robot Animation',
-    description: 'Cheerful bot character ready for motion and interaction studies.',
+    description: 'AI avatar set exploring character design and motion.',
     skill: 'Motion',
     tool: 'After Effects',
     image: '/projects/robot-animation.png',

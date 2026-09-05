@@ -194,7 +194,7 @@ export function DraggableCanvas({
 
     setActiveId(id)
     onActiveProjectChange(
-      id ? (projects.find((p) => p.id === id)?.title ?? null) : null,
+      id ? (projects.find((p) => p.id === id)?.description ?? null) : null,
     )
   }, [onActiveProjectChange, projects])
 
@@ -261,8 +261,8 @@ export function DraggableCanvas({
       }
 
       setActiveId(id)
-      const title = projects.find((p) => p.id === id)?.title ?? null
-      onActiveProjectChange(title)
+      const description = projects.find((p) => p.id === id)?.description ?? null
+      onActiveProjectChange(description)
       revealProject(id)
     },
     [onActiveProjectChange, projects, revealProject],
@@ -292,7 +292,7 @@ export function DraggableCanvas({
 
       setViewMode(layout)
       setActiveId(id)
-      onActiveProjectChange(project.title)
+      onActiveProjectChange(project.description)
 
       const z = zoomRef.current
       const next = {

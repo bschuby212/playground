@@ -8,6 +8,46 @@ type PlaygroundHeaderProps = {
   touchMode?: boolean
 }
 
+function SquareMousePointerIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12.034 12.681a.498.498 0 0 1 .647-.647l9 3.5a.5.5 0 0 1-.033.943l-3.444 1.068a1 1 0 0 0-.66.66l-1.067 3.443a.5.5 0 0 1-.943.033z" />
+      <path d="M21 11V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6" />
+    </svg>
+  )
+}
+
+function LinkViewIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M7 7h10v10" />
+    </svg>
+  )
+}
+
 export function PlaygroundHeader({
   hint,
   activeTitle,
@@ -66,9 +106,9 @@ export function PlaygroundHeader({
           .join(' ')}
         aria-live="polite"
       >
-        {showingHint && (
-          <span className="playground-header__icon" aria-hidden="true">
-            {touchMode ? (
+        <span className="playground-header__icon" aria-hidden="true">
+          {showingHint ? (
+            touchMode ? (
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                 <path
                   d="M6.2 1.8c0-.55.45-1 1-1s1 .45 1 1v5.35l1.05-.85a1.05 1.05 0 0 1 1.5.15l.08.1a1 1 0 0 1-.12 1.35L8.2 11.1A3.2 3.2 0 0 1 6 12.1H4.4A2.4 2.4 0 0 1 2 9.7V7.35c0-.66.54-1.2 1.2-1.2.28 0 .54.1.74.26V1.8Z"
@@ -78,17 +118,12 @@ export function PlaygroundHeader({
                 />
               </svg>
             ) : (
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                <path
-                  d="M4.2 1.4 5.1 10.6l2.05-1.55 1.55 3.15c.18.36.62.51.98.33l.72-.36a.72.72 0 0 0 .33-.98L9.2 8.05l2.55-.35L4.2 1.4Z"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </span>
-        )}
+              <SquareMousePointerIcon />
+            )
+          ) : (
+            <LinkViewIcon />
+          )}
+        </span>
         <span className="playground-header__text">{renderedText}</span>
       </div>
     </header>
