@@ -113,20 +113,29 @@
   user-select: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 999px) {
   .canvas-controls {
-    top: 0.6rem;
-    right: 0.6rem;
-    padding: 0.22rem;
+    top: auto;
+    right: auto;
+    bottom: 0.85rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.28rem;
   }
 
   .canvas-controls__button {
-    width: 1.7rem;
-    height: 1.7rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   .canvas-controls__zoom {
-    min-width: 2.3rem;
+    min-width: 2.4rem;
     font-size: 0.7rem;
+  }
+
+  /* Tooltips open upward so they stay on screen */
+  .canvas-controls__button--tooltip::after {
+    top: auto;
+    bottom: calc(100% + 0.55rem);
   }
 }
