@@ -37,7 +37,6 @@ export function PlaygroundPage() {
           hint={defaultHint}
           activeTitle={activeTitle}
           reducedMotion={reducedMotion}
-          touchMode={touchMode}
         />
         <DraggableCanvas
           reducedMotion={reducedMotion}

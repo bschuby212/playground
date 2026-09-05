@@ -5,10 +5,9 @@ type PlaygroundHeaderProps = {
   hint: string
   activeTitle: string | null
   reducedMotion: boolean
-  touchMode?: boolean
 }
 
-function SquareMousePointerIcon() {
+function PointerIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -22,8 +21,11 @@ function SquareMousePointerIcon() {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M12.034 12.681a.498.498 0 0 1 .647-.647l9 3.5a.5.5 0 0 1-.033.943l-3.444 1.068a1 1 0 0 0-.66.66l-1.067 3.443a.5.5 0 0 1-.943.033z" />
-      <path d="M21 11V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6" />
+      <path d="M22 14a8 8 0 0 1-8 8" />
+      <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+      <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1" />
+      <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10" />
+      <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
     </svg>
   )
 }
@@ -52,7 +54,6 @@ export function PlaygroundHeader({
   hint,
   activeTitle,
   reducedMotion,
-  touchMode = false,
 }: PlaygroundHeaderProps) {
   const displayText = activeTitle ?? hint
   const [renderedText, setRenderedText] = useState(displayText)
@@ -107,22 +108,7 @@ export function PlaygroundHeader({
         aria-live="polite"
       >
         <span className="playground-header__icon" aria-hidden="true">
-          {showingHint ? (
-            touchMode ? (
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                <path
-                  d="M6.2 1.8c0-.55.45-1 1-1s1 .45 1 1v5.35l1.05-.85a1.05 1.05 0 0 1 1.5.15l.08.1a1 1 0 0 1-.12 1.35L8.2 11.1A3.2 3.2 0 0 1 6 12.1H4.4A2.4 2.4 0 0 1 2 9.7V7.35c0-.66.54-1.2 1.2-1.2.28 0 .54.1.74.26V1.8Z"
-                  stroke="currentColor"
-                  strokeWidth="1.15"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : (
-              <SquareMousePointerIcon />
-            )
-          ) : (
-            <LinkViewIcon />
-          )}
+          {showingHint ? <PointerIcon /> : <LinkViewIcon />}
         </span>
         <span className="playground-header__text">{renderedText}</span>
       </div>
