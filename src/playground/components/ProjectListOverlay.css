@@ -254,6 +254,25 @@
     padding: 0.55rem;
   }
 
+  .project-list-overlay__panel {
+    padding-bottom: 3.25rem;
+  }
+
+  .project-list-overlay__close {
+    top: auto;
+    right: auto;
+    bottom: 0.55rem;
+    left: 50%;
+    transform: translateX(-50%);
+    min-height: 2.75rem;
+    min-width: 6.5rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    background: rgba(17, 17, 17, 0.05);
+    color: var(--color-text);
+    font-size: 0.875rem;
+  }
+
   .project-list-overlay__row {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:

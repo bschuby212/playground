@@ -90,16 +90,17 @@
 .playground-header__text {
   flex: 0 1 auto;
   width: fit-content;
-  max-width: min(320px, 100%);
+  max-width: min(420px, 100%);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   font-weight: 400;
   letter-spacing: 0;
   line-height: 1.3;
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .playground-header__meta.is-project .playground-header__text {
@@ -121,21 +122,27 @@
   object-fit: cover;
 }
 
-/* Touch / compact: wrap copy, hide tools (handled in JSX), keep 8px icon gap */
+/* Touch / compact: hide tools (handled in JSX), keep 8px icon gap */
 .playground-header__meta.is-touch {
   max-width: min(280px, 58vw);
 }
 
-.playground-header__meta.is-touch .playground-header__text {
-  white-space: normal;
-  overflow: visible;
-  text-overflow: unset;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-}
-
 .playground-header__meta.is-touch .playground-header__tools {
   display: none;
+}
+
+/* Mobile / compact: flush thumbnail details to the right edge */
+@media (max-width: 999px) {
+  .playground-header {
+    padding-right: 0;
+  }
+
+  .playground-header__meta,
+  .playground-header__meta.is-touch {
+    max-width: min(280px, 58vw);
+    margin-right: 0;
+    padding-right: 0;
+  }
 }
 
 @media (max-width: 640px) {
@@ -143,17 +150,8 @@
     min-height: 2.25rem;
   }
 
-  .playground-header__meta {
-    max-width: min(280px, 58vw);
-  }
-
   .playground-header__text {
     font-size: max(12px, calc(var(--text-body) - 1px));
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
   }
 
   .playground-header__tools {
