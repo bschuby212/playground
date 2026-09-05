@@ -1,6 +1,7 @@
 export const playgroundConfig = {
   defaultHint: 'Hover thumbnail for info',
-  mobileHint: 'Double tap to view project',
+  mobileHint: 'Tap a project for info',
+  mobileDetailHint: 'Double tap to view details',
   openLinksInNewTab: true,
   enableProximityScaling: true,
   enableMomentum: false,
@@ -41,8 +42,13 @@ export const playgroundConfig = {
   edgeScale: 0.84,
   hoverScale: 1.05,
   dragThreshold: 5,
+  /** Higher threshold on touch / compact viewports so taps don't become pans. */
+  touchDragThreshold: 10,
   startingX: -380,
   startingY: -220,
+  /** Phone / tablet start — top of the vertical stack. */
+  mobileStartingX: -24,
+  mobileStartingY: -48,
   revealPadding: 56,
   revealDurationMs: 340,
   revealMaxNudge: 140,

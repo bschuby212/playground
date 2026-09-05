@@ -11,6 +11,8 @@ export type PlaygroundProject = {
   width: number
   height: number
   alt: string
+  /** When false, hidden below 800px (case studies that aren’t mobile-friendly). */
+  showOnMobile: boolean
 }
 
 /** Thumbnail size presets — edit positions freely without touching interaction logic. */
@@ -36,6 +38,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 200,
     ...thumbnailSizes.large,
     alt: 'Saturday Design System documentation overview',
+    showOnMobile: false,
   },
   {
     id: 'project-02',
@@ -49,6 +52,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 120,
     ...thumbnailSizes.medium,
     alt: 'Blossom healthcare platform hero',
+    showOnMobile: false,
   },
   {
     id: 'project-03',
@@ -62,6 +66,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 240,
     ...thumbnailSizes.large,
     alt: 'Glyph design toolkit workspace',
+    showOnMobile: false,
   },
   {
     id: 'project-04',
@@ -75,6 +80,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 150,
     ...thumbnailSizes.medium,
     alt: 'Digital bookshelf design reference shelf',
+    showOnMobile: false,
   },
   {
     id: 'project-05',
@@ -88,6 +94,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 280,
     ...thumbnailSizes.tall,
     alt: 'Buddy the Brave trading card',
+    showOnMobile: false,
   },
   {
     id: 'project-06',
@@ -101,6 +108,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 580,
     ...thumbnailSizes.medium,
     alt: 'RetroTV with Pokémon on screen',
+    showOnMobile: true,
   },
   {
     id: 'project-07',
@@ -114,6 +122,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 560,
     ...thumbnailSizes.large,
     alt: 'Inspo gallery with mobile app mockups',
+    showOnMobile: true,
   },
   {
     id: 'project-08',
@@ -127,6 +136,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 520,
     ...thumbnailSizes.large,
     alt: 'Invoice Studio new invoice and live preview',
+    showOnMobile: false,
   },
   {
     id: 'project-09',
@@ -140,5 +150,6 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 620,
     ...thumbnailSizes.square,
     alt: 'Blue robot character with glowing smile',
+    showOnMobile: true,
   },
 ]

@@ -23,6 +23,8 @@ type DraggableCanvasProps = {
   reducedMotion: boolean
   enableProximityScaling: boolean
   touchMode: boolean
+  /** Hide projects with showOnMobile: false (tablet + phone). */
+  mobileViewport: boolean
   onActiveProjectChange: (title: string | null) => void
 }
 
@@ -37,6 +39,7 @@ export function DraggableCanvas({
   reducedMotion,
   enableProximityScaling,
   touchMode,
+  mobileViewport,
   onActiveProjectChange,
 }: DraggableCanvasProps) {
   const [layout, setLayout] = useState<LayoutMode>(playgroundConfig.defaultLayout)
@@ -56,10 +59,20 @@ export function DraggableCanvas({
   zoomRef.current = zoom
   const listOpen = viewMode === 'list'
 
-  const projects = useMemo(
-    () => applyLayout(playgroundProjects, layout),
-    [layout],
-  )
+  const projects = useMemo(() => {
+    const source = mobileViewport
+      ? playgroundProjects.filter((project) => project.showOnMobile)
+      : playgroundProjects
+    return applyLayout(source, layout, { mobileVertical: mobileViewport })
+  }, [layout, mobileViewport])
+
+  // Clear selection if the active project was filtered out on resize
+  useEffect(() => {
+    if (activeId && !projects.some((project) => project.id === activeId)) {
+      setActiveId(null)
+      onActiveProjectChange(null)
+    }
+  }, [activeId, onActiveProjectChange, projects])
 
   const contentBounds = useMemo(() => {
     let left = Infinity
@@ -92,9 +105,11 @@ export function DraggableCanvas({
     applyPosition,
     animateTo,
   } = useCanvasDrag({
-    startingX: playgroundConfig.startingX,
-    startingY: playgroundConfig.startingY,
-    dragThreshold: playgroundConfig.dragThreshold,
+    startingX: mobileViewport ? playgroundConfig.mobileStartingX : playgroundConfig.startingX,
+    startingY: mobileViewport ? playgroundConfig.mobileStartingY : playgroundConfig.startingY,
+    dragThreshold: touchMode
+      ? playgroundConfig.touchDragThreshold
+      : playgroundConfig.dragThreshold,
     enableMomentum: playgroundConfig.enableMomentum,
     reducedMotion,
     zoom,

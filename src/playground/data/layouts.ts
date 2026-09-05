@@ -8,72 +8,28 @@ export type LayoutPlacement = {
   height: number
 }
 
-type OrbitItem = {
-  id: string
-  size: keyof typeof thumbnailSizes
-  /** Degrees from center; uneven spacing keeps the ring feeling playful. */
-  angleDeg: number
-  /** Multiplier on base radius (0.7–1.2) for stagger in/out. */
-  radiusScale: number
-  /** Extra nudge in canvas px after polar placement. */
-  nudgeX?: number
-  nudgeY?: number
+/** Organic scattered placement — freeform composition for nine projects. */
+export const scatteredLayout: Record<string, LayoutPlacement> = {
+  'project-01': { x: 140, y: 160, ...thumbnailSizes.large },
+  'project-02': { x: 680, y: 100, ...thumbnailSizes.medium },
+  'project-03': { x: 1100, y: 180, ...thumbnailSizes.large },
+  'project-04': { x: 1660, y: 120, ...thumbnailSizes.medium },
+  'project-05': { x: 2080, y: 380, ...thumbnailSizes.tall },
+  'project-06': { x: 180, y: 540, ...thumbnailSizes.medium },
+  'project-07': { x: 600, y: 540, ...thumbnailSizes.large },
+  'project-08': { x: 1160, y: 560, ...thumbnailSizes.large },
+  'project-09': { x: 1720, y: 620, ...thumbnailSizes.square },
 }
 
 /**
- * Playground ring: roughly circular, but staggered angles/radii so it
- * reads as a loose constellation instead of a neat oval.
+ * Phone / thin embed — vertical stack with light left-right stagger
+ * so pan is mostly up/down on narrow screens.
  */
-function buildPlaygroundRing(
-  center: { id: string; size: keyof typeof thumbnailSizes; nudgeX?: number; nudgeY?: number },
-  orbit: OrbitItem[],
-  options: { cx: number; cy: number; radiusX: number; radiusY: number },
-): Record<string, LayoutPlacement> {
-  const { cx, cy, radiusX, radiusY } = options
-  const layout: Record<string, LayoutPlacement> = {}
-
-  const centerSize = thumbnailSizes[center.size]
-  layout[center.id] = {
-    x: Math.round(cx - centerSize.width / 2 + (center.nudgeX ?? 0)),
-    y: Math.round(cy - centerSize.height / 2 + (center.nudgeY ?? 0)),
-    ...centerSize,
-  }
-
-  for (const item of orbit) {
-    const size = thumbnailSizes[item.size]
-    const angle = (item.angleDeg * Math.PI) / 180
-    const px = cx + radiusX * item.radiusScale * Math.cos(angle) + (item.nudgeX ?? 0)
-    const py = cy + radiusY * item.radiusScale * Math.sin(angle) + (item.nudgeY ?? 0)
-    layout[item.id] = {
-      x: Math.round(px - size.width / 2),
-      y: Math.round(py - size.height / 2),
-      ...size,
-    }
-  }
-
-  return layout
+export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
+  'project-06': { x: 72, y: 120, width: 300, height: 204 },
+  'project-07': { x: 36, y: 380, width: 320, height: 216 },
+  'project-09': { x: 88, y: 660, width: 260, height: 260 },
 }
-
-/** Scattered playground — loose circular constellation with uneven spacing. */
-export const scatteredLayout: Record<string, LayoutPlacement> = buildPlaygroundRing(
-  { id: 'project-09', size: 'square', nudgeX: 24, nudgeY: -18 },
-  [
-    { id: 'project-01', size: 'large', angleDeg: -98, radiusScale: 1.08, nudgeX: -20, nudgeY: 12 },
-    { id: 'project-02', size: 'medium', angleDeg: -48, radiusScale: 0.82, nudgeX: 36, nudgeY: -28 },
-    { id: 'project-03', size: 'large', angleDeg: -8, radiusScale: 1.14, nudgeX: 18, nudgeY: 40 },
-    { id: 'project-04', size: 'medium', angleDeg: 38, radiusScale: 0.9, nudgeX: -30, nudgeY: 22 },
-    { id: 'project-05', size: 'tall', angleDeg: 78, radiusScale: 1.18, nudgeX: 14, nudgeY: -16 },
-    { id: 'project-06', size: 'medium', angleDeg: 128, radiusScale: 0.86, nudgeX: -42, nudgeY: 8 },
-    { id: 'project-07', size: 'large', angleDeg: 168, radiusScale: 1.06, nudgeX: 26, nudgeY: -34 },
-    { id: 'project-08', size: 'large', angleDeg: -148, radiusScale: 0.94, nudgeX: -12, nudgeY: 48 },
-  ],
-  {
-    cx: 1180,
-    cy: 880,
-    radiusX: 780,
-    radiusY: 520,
-  },
-)
 
 /**
  * Clean bento rows — three rows for the current 9-item set.
@@ -90,17 +46,7 @@ export const bentoLayout: Record<string, LayoutPlacement> = (() => {
     ['medium', 'large', 'tall'],
   ]
 
-  const ids = [
-    'project-01',
-    'project-02',
-    'project-03',
-    'project-04',
-    'project-05',
-    'project-06',
-    'project-07',
-    'project-08',
-    'project-09',
-  ]
+  const ids = Object.keys(scatteredLayout)
   const layout: Record<string, LayoutPlacement> = {}
   let index = 0
   let y = originY
@@ -131,8 +77,12 @@ export const layouts: Record<LayoutMode, Record<string, LayoutPlacement>> = {
 export function applyLayout(
   projects: PlaygroundProject[],
   mode: LayoutMode,
+  options?: { mobileVertical?: boolean },
 ): PlaygroundProject[] {
-  const placement = layouts[mode]
+  const placement = options?.mobileVertical
+    ? mobileVerticalLayout
+    : layouts[mode]
+
   return projects.map((project) => {
     const next = placement[project.id]
     if (!next) return project
