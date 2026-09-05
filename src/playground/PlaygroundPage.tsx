@@ -5,6 +5,7 @@ import {
   type ActiveProjectMeta,
 } from './components/PlaygroundHeader'
 import { DraggableCanvas } from './components/DraggableCanvas'
+import { FullscreenOpenButton } from './components/FullscreenOpenButton'
 import { useCompactViewport } from './hooks/useCompactViewport'
 import { useIsCoarsePointer } from './hooks/useIsCoarsePointer'
 import { useNarrowMobile } from './hooks/useNarrowMobile'
@@ -50,6 +51,7 @@ export function PlaygroundPage() {
           onActiveProjectChange={handleActiveProjectChange}
         />
       </div>
+      <FullscreenOpenButton />
     </main>
   )
 }
