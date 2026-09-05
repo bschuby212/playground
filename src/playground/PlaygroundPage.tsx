@@ -1,6 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 import { playgroundConfig } from './data/config'
-import { PlaygroundHeader } from './components/PlaygroundHeader'
+import {
+  PlaygroundHeader,
+  type ActiveProjectMeta,
+} from './components/PlaygroundHeader'
 import { DraggableCanvas } from './components/DraggableCanvas'
 import { useCompactViewport } from './hooks/useCompactViewport'
 import { useIsCoarsePointer } from './hooks/useIsCoarsePointer'
@@ -13,7 +16,7 @@ export function PlaygroundPage() {
   const isCoarsePointer = useIsCoarsePointer()
   const isCompactViewport = useCompactViewport()
   const isNarrowMobile = useNarrowMobile()
-  const [activeTitle, setActiveTitle] = useState<string | null>(null)
+  const [activeProject, setActiveProject] = useState<ActiveProjectMeta | null>(null)
 
   // Under 1000px (and coarse pointers): touch-first — no cursor-follow, clearer tap vs pan
   const touchMode = isCoarsePointer || isCompactViewport
@@ -26,8 +29,8 @@ export function PlaygroundPage() {
   const enableProximityScaling =
     playgroundConfig.enableProximityScaling && !(touchMode && isNarrowMobile)
 
-  const handleActiveProjectChange = useCallback((title: string | null) => {
-    setActiveTitle(title)
+  const handleActiveProjectChange = useCallback((project: ActiveProjectMeta | null) => {
+    setActiveProject(project)
   }, [])
 
   return (
@@ -35,8 +38,9 @@ export function PlaygroundPage() {
       <div className="playground-page__frame">
         <PlaygroundHeader
           hint={defaultHint}
-          activeTitle={activeTitle}
+          activeProject={activeProject}
           reducedMotion={reducedMotion}
+          touchMode={touchMode}
         />
         <DraggableCanvas
           reducedMotion={reducedMotion}

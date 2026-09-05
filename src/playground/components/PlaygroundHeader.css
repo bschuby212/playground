@@ -32,7 +32,7 @@
   margin-left: auto;
   flex: 0 1 auto;
   width: fit-content;
-  max-width: min(520px, 62vw);
+  max-width: min(640px, 68vw);
   text-align: right;
   transition:
     opacity 140ms ease,
@@ -95,16 +95,64 @@
   font-weight: 500;
 }
 
+.playground-header__tools {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  margin-left: 2px;
+}
+
+.playground-header__tool {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+/* Touch / compact: allow description to wrap; click icon signals double-tap */
+.playground-header__meta.is-touch.is-project {
+  align-items: flex-start;
+  max-width: min(320px, 58vw);
+}
+
+.playground-header__meta.is-touch.is-project .playground-header__icon {
+  margin-top: 0.15rem;
+}
+
+.playground-header__meta.is-touch.is-project .playground-header__text,
+.playground-header__meta.is-touch .playground-header__text {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
 @media (max-width: 640px) {
   .playground-header {
     min-height: 2.25rem;
   }
 
   .playground-header__meta {
-    max-width: min(520px, 58vw);
+    max-width: min(320px, 58vw);
+  }
+
+  .playground-header__meta.is-project {
+    align-items: flex-start;
+  }
+
+  .playground-header__meta.is-project .playground-header__icon {
+    margin-top: 0.15rem;
   }
 
   .playground-header__text {
     font-size: max(12px, calc(var(--text-body) - 1px));
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 }

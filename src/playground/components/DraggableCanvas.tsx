@@ -10,10 +10,12 @@ import {
 import { playgroundConfig, type LayoutMode } from '../data/config'
 import { applyLayout } from '../data/layouts'
 import { playgroundProjects } from '../data/projects'
+import { resolveTools } from '../data/tools'
 import { getProximityScale } from '../hooks/proximityScale'
 import { getRevealOffset } from '../hooks/revealProject'
 import { useCanvasDrag } from '../hooks/useCanvasDrag'
 import { useCursorParallax } from '../hooks/useCursorParallax'
+import { type ActiveProjectMeta } from './PlaygroundHeader'
 import { CanvasControls, type ViewMode } from './CanvasControls'
 import { ProjectListOverlay } from './ProjectListOverlay'
 import { ProjectThumbnail } from './ProjectThumbnail'
@@ -25,7 +27,17 @@ type DraggableCanvasProps = {
   touchMode: boolean
   /** Hide projects with showOnMobile: false (tablet + phone). */
   mobileViewport: boolean
-  onActiveProjectChange: (title: string | null) => void
+  onActiveProjectChange: (project: ActiveProjectMeta | null) => void
+}
+
+function toActiveMeta(
+  project: { description: string; tools: Parameters<typeof resolveTools>[0] } | null | undefined,
+): ActiveProjectMeta | null {
+  if (!project) return null
+  return {
+    description: project.description,
+    tools: resolveTools(project.tools),
+  }
 }
 
 function clampZoom(value: number) {
@@ -193,9 +205,7 @@ export function DraggableCanvas({
     const id = thumb?.dataset.projectId ?? null
 
     setActiveId(id)
-    onActiveProjectChange(
-      id ? (projects.find((p) => p.id === id)?.description ?? null) : null,
-    )
+    onActiveProjectChange(toActiveMeta(id ? projects.find((p) => p.id === id) : null))
   }, [onActiveProjectChange, projects])
 
   const revealProject = useCallback(
@@ -261,8 +271,7 @@ export function DraggableCanvas({
       }
 
       setActiveId(id)
-      const description = projects.find((p) => p.id === id)?.description ?? null
-      onActiveProjectChange(description)
+      onActiveProjectChange(toActiveMeta(projects.find((p) => p.id === id)))
       revealProject(id)
     },
     [onActiveProjectChange, projects, revealProject],
@@ -292,7 +301,7 @@ export function DraggableCanvas({
 
       setViewMode(layout)
       setActiveId(id)
-      onActiveProjectChange(project.description)
+      onActiveProjectChange(toActiveMeta(project))
 
       const z = zoomRef.current
       const next = {
