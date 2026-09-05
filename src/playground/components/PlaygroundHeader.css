@@ -7,19 +7,8 @@
   /* Space below title/body/copy before the full-bleed grid */
   margin-bottom: 1rem;
   min-height: 2.75rem;
-  padding: 0 1.15rem;
+  padding: 0;
   box-sizing: border-box;
-}
-
-/*
- * Standalone full page (≥1000px): 40px left/right on title, body,
- * and hover description only — canvas stays edge-to-edge.
- */
-@media (min-width: 1000px) {
-  .playground-page.is-standalone .playground-header {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
 }
 
 .playground-header__brand {

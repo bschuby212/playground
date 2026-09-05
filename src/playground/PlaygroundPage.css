@@ -25,7 +25,7 @@
   flex-direction: column;
   min-height: 0;
   /* Vertical pad for title/copy only — canvas stays full-bleed below */
-  padding: 1.15rem 0 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
