@@ -1,7 +1,7 @@
 export const playgroundConfig = {
   tagline: 'Design experiments using AI, code, and emerging tools',
   /** Live site opened by the desktop fullscreen button (Framer → new tab). */
-  siteUrl: 'https://temporary-fast-xenon-dbnf1jf.vercel.app',
+  siteUrl: 'https://temporary-flying-platinum-s0uvlub.vercel.app',
   defaultHint: 'Hover Thumbnails',
   mobileHint: 'Tap Thumbnails',
   mobileDetailHint: 'Double tap to open',
