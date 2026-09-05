@@ -8,73 +8,70 @@ export type LayoutPlacement = {
   height: number
 }
 
-type SizedItem = {
+type OrbitItem = {
   id: string
   size: keyof typeof thumbnailSizes
+  /** Degrees from center; uneven spacing keeps the ring feeling playful. */
+  angleDeg: number
+  /** Multiplier on base radius (0.7–1.2) for stagger in/out. */
+  radiusScale: number
+  /** Extra nudge in canvas px after polar placement. */
+  nudgeX?: number
+  nudgeY?: number
 }
 
 /**
- * Place items on an ellipse around the canvas center.
- * One piece sits in the middle; the rest orbit in a ring.
+ * Playground ring: roughly circular, but staggered angles/radii so it
+ * reads as a loose constellation instead of a neat oval.
  */
-function buildCircularLayout(
-  center: SizedItem,
-  ring: SizedItem[],
-  options: {
-    cx: number
-    cy: number
-    radiusX: number
-    radiusY: number
-    startAngleDeg?: number
-  },
+function buildPlaygroundRing(
+  center: { id: string; size: keyof typeof thumbnailSizes; nudgeX?: number; nudgeY?: number },
+  orbit: OrbitItem[],
+  options: { cx: number; cy: number; radiusX: number; radiusY: number },
 ): Record<string, LayoutPlacement> {
-  const { cx, cy, radiusX, radiusY, startAngleDeg = -90 } = options
+  const { cx, cy, radiusX, radiusY } = options
   const layout: Record<string, LayoutPlacement> = {}
 
   const centerSize = thumbnailSizes[center.size]
   layout[center.id] = {
-    x: Math.round(cx - centerSize.width / 2),
-    y: Math.round(cy - centerSize.height / 2),
+    x: Math.round(cx - centerSize.width / 2 + (center.nudgeX ?? 0)),
+    y: Math.round(cy - centerSize.height / 2 + (center.nudgeY ?? 0)),
     ...centerSize,
   }
 
-  const count = ring.length
-  ring.forEach((item, index) => {
+  for (const item of orbit) {
     const size = thumbnailSizes[item.size]
-    const angle = ((startAngleDeg + (360 / count) * index) * Math.PI) / 180
-    // Slight radius wobble keeps the ring from reading as a rigid oval
-    const wobble = 1 + (((index % 3) - 1) * 0.04)
-    const px = cx + radiusX * wobble * Math.cos(angle)
-    const py = cy + radiusY * wobble * Math.sin(angle)
+    const angle = (item.angleDeg * Math.PI) / 180
+    const px = cx + radiusX * item.radiusScale * Math.cos(angle) + (item.nudgeX ?? 0)
+    const py = cy + radiusY * item.radiusScale * Math.sin(angle) + (item.nudgeY ?? 0)
     layout[item.id] = {
       x: Math.round(px - size.width / 2),
       y: Math.round(py - size.height / 2),
       ...size,
     }
-  })
+  }
 
   return layout
 }
 
-/** Circular scattered placement — ring around a center piece. */
-export const scatteredLayout: Record<string, LayoutPlacement> = buildCircularLayout(
-  { id: 'project-09', size: 'square' },
+/** Scattered playground — loose circular constellation with uneven spacing. */
+export const scatteredLayout: Record<string, LayoutPlacement> = buildPlaygroundRing(
+  { id: 'project-09', size: 'square', nudgeX: 24, nudgeY: -18 },
   [
-    { id: 'project-01', size: 'large' },
-    { id: 'project-02', size: 'medium' },
-    { id: 'project-03', size: 'large' },
-    { id: 'project-04', size: 'medium' },
-    { id: 'project-05', size: 'tall' },
-    { id: 'project-06', size: 'medium' },
-    { id: 'project-07', size: 'large' },
-    { id: 'project-08', size: 'large' },
+    { id: 'project-01', size: 'large', angleDeg: -98, radiusScale: 1.08, nudgeX: -20, nudgeY: 12 },
+    { id: 'project-02', size: 'medium', angleDeg: -48, radiusScale: 0.82, nudgeX: 36, nudgeY: -28 },
+    { id: 'project-03', size: 'large', angleDeg: -8, radiusScale: 1.14, nudgeX: 18, nudgeY: 40 },
+    { id: 'project-04', size: 'medium', angleDeg: 38, radiusScale: 0.9, nudgeX: -30, nudgeY: 22 },
+    { id: 'project-05', size: 'tall', angleDeg: 78, radiusScale: 1.18, nudgeX: 14, nudgeY: -16 },
+    { id: 'project-06', size: 'medium', angleDeg: 128, radiusScale: 0.86, nudgeX: -42, nudgeY: 8 },
+    { id: 'project-07', size: 'large', angleDeg: 168, radiusScale: 1.06, nudgeX: 26, nudgeY: -34 },
+    { id: 'project-08', size: 'large', angleDeg: -148, radiusScale: 0.94, nudgeX: -12, nudgeY: 48 },
   ],
   {
-    cx: 1200,
-    cy: 900,
-    radiusX: 820,
-    radiusY: 560,
-    startAngleDeg: -90,
+    cx: 1180,
+    cy: 880,
+    radiusX: 780,
+    radiusY: 520,
   },
 )
 
