@@ -49,9 +49,10 @@ export const playgroundConfig = {
   dragThreshold: 5,
   /** Higher threshold on touch / compact viewports so taps don't become pans. */
   touchDragThreshold: 10,
+  /** Fallback pan before the canvas measures and auto-centers the cluster. */
   startingX: -380,
   startingY: -220,
-  /** Phone / tablet start — tight crop so more projects show by default. */
+  /** Fallback pan on compact viewports before auto-center runs. */
   mobileStartingX: -8,
   mobileStartingY: -12,
   revealPadding: 56,

@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -13,6 +14,7 @@ import { playgroundProjects } from '../data/projects'
 import { resolveTools } from '../data/tools'
 import { getProximityScale } from '../hooks/proximityScale'
 import { getRevealOffset } from '../hooks/revealProject'
+import { getCenteredPan } from '../hooks/centerContent'
 import { useCanvasDrag } from '../hooks/useCanvasDrag'
 import { useCursorParallax } from '../hooks/useCursorParallax'
 import { type ActiveProjectMeta } from './PlaygroundHeader'
@@ -104,6 +106,11 @@ export function DraggableCanvas({
     updateScalesRef.current(offset)
   }, [])
 
+  const [homePan, setHomePan] = useState<{ x: number; y: number }>(() => ({
+    x: mobileViewport ? playgroundConfig.mobileStartingX : playgroundConfig.startingX,
+    y: mobileViewport ? playgroundConfig.mobileStartingY : playgroundConfig.startingY,
+  }))
+
   const {
     containerRef,
     surfaceRef,
@@ -117,8 +124,8 @@ export function DraggableCanvas({
     applyPosition,
     animateTo,
   } = useCanvasDrag({
-    startingX: mobileViewport ? playgroundConfig.mobileStartingX : playgroundConfig.startingX,
-    startingY: mobileViewport ? playgroundConfig.mobileStartingY : playgroundConfig.startingY,
+    startingX: homePan.x,
+    startingY: homePan.y,
     dragThreshold: touchMode
       ? playgroundConfig.touchDragThreshold
       : playgroundConfig.dragThreshold,
@@ -138,6 +145,27 @@ export function DraggableCanvas({
     positionRef,
     applyPosition,
   })
+
+  // Keep the project cluster centered in the current frame (e.g. 1440×800 embeds).
+  // Layout positions stay put — only the starting pan offset is derived from the viewport.
+  useLayoutEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const centerInFrame = () => {
+      const { clientWidth, clientHeight } = container
+      if (clientWidth < 2 || clientHeight < 2) return
+      if (!Number.isFinite(contentBounds.left) || !Number.isFinite(contentBounds.top)) return
+
+      const next = getCenteredPan(contentBounds, clientWidth, clientHeight, zoomRef.current)
+      setHomePan(next)
+      applyPosition(next)
+    }
+
+    centerInFrame()
+    const raf = window.requestAnimationFrame(centerInFrame)
+    return () => window.cancelAnimationFrame(raf)
+  }, [applyPosition, containerRef, contentBounds, layout, mobileViewport])
 
   const applyScaleToNode = useCallback(
     (id: string, proximityScale: number) => {
@@ -286,16 +314,12 @@ export function DraggableCanvas({
       setActiveId(null)
       onActiveProjectChange(null)
 
-      // Mobile: snap pan back so grid / spread lands cleanly in view
+      // Mobile: reset zoom; layout effect recenters the cluster in the frame
       if (mobileViewport) {
         setZoom(1)
-        applyPosition({
-          x: playgroundConfig.mobileStartingX,
-          y: playgroundConfig.mobileStartingY,
-        })
       }
     },
-    [applyPosition, mobileViewport, onActiveProjectChange],
+    [mobileViewport, onActiveProjectChange],
   )
 
   const handleCloseList = useCallback(() => {
