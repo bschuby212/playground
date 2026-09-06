@@ -110,8 +110,8 @@ export function ProjectListOverlay({
 }: ProjectListOverlayProps) {
   if (!open) return null
 
-  const linkTarget = playgroundConfig.openLinksInNewTab ? '_blank' : undefined
-  const linkRel = playgroundConfig.openLinksInNewTab ? 'noopener noreferrer' : undefined
+  const linkTarget = playgroundConfig.linkTarget
+  const linkRel = linkTarget === '_blank' ? 'noopener noreferrer' : undefined
 
   return (
     <div

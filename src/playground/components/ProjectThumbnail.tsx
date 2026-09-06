@@ -105,8 +105,8 @@ function ProjectThumbnailComponent({
     [onActivate, project.id, shouldSuppressClick, touchMode],
   )
 
-  const linkTarget = playgroundConfig.openLinksInNewTab ? '_blank' : undefined
-  const linkRel = playgroundConfig.openLinksInNewTab ? 'noopener noreferrer' : undefined
+  const linkTarget = playgroundConfig.linkTarget
+  const linkRel = linkTarget === '_blank' ? 'noopener noreferrer' : undefined
   const initiallyDistant = project.x > 1400 || project.y > 1100
 
   return (
