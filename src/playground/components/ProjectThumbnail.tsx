@@ -81,8 +81,14 @@ function ProjectThumbnailComponent({
         return
       }
 
-      // Desktop (≥1000px, fine pointer): single click opens the Framer case study.
-      if (!touchMode) return
+      // Desktop (≥1000px, fine pointer): open in a real tab.
+      // Framer iframes often block target=_top, so force window.open.
+      if (!touchMode) {
+        event.preventDefault()
+        event.stopPropagation()
+        window.open(project.href, '_blank', 'noopener,noreferrer')
+        return
+      }
 
       // Mobile / tablet: no hover — first tap shows details, second tap opens.
       const now = performance.now()
@@ -94,6 +100,9 @@ function ProjectThumbnailComponent({
 
       if (isDoubleTap) {
         lastTapRef.current = null
+        event.preventDefault()
+        event.stopPropagation()
+        window.open(project.href, '_blank', 'noopener,noreferrer')
         return
       }
 
@@ -102,7 +111,7 @@ function ProjectThumbnailComponent({
       onActivate(project.id)
       lastTapRef.current = { id: project.id, time: now }
     },
-    [onActivate, project.id, shouldSuppressClick, touchMode],
+    [onActivate, project.href, project.id, shouldSuppressClick, touchMode],
   )
 
   const linkTarget = playgroundConfig.linkTarget

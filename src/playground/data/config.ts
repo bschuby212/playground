@@ -5,10 +5,9 @@ export const playgroundConfig = {
   mobileDetailHint: 'Double tap to open',
   /**
    * How project links open from the Framer embed.
-   * `_top` navigates the whole parent page (no mini iframe page).
-   * Use `_blank` if you want a new tab instead.
+   * `_blank` opens a real browser tab (Framer blocks `_top` in iframes).
    */
-  linkTarget: '_top' as '_blank' | '_top' | '_self',
+  linkTarget: '_blank' as '_blank' | '_top' | '_self',
   enableProximityScaling: true,
   enableMomentum: false,
   enableHoverReveal: false,
