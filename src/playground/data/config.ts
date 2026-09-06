@@ -39,7 +39,7 @@ export const playgroundConfig = {
   edgePanVerticalBoost: 1.55,
   /** Padding around the toolbar where cursor-follow pan is disabled (px). */
   controlsDeadZone: 56,
-  defaultLayout: 'scattered' as 'scattered' | 'bento',
+  defaultLayout: 'bento' as 'scattered' | 'bento',
   canvasWidth: 2400,
   canvasHeight: 1800,
   gridSize: 32,
