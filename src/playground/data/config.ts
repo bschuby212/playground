@@ -3,7 +3,7 @@ export const playgroundConfig = {
   defaultHint: 'Hover Thumbnails',
   mobileHint: 'Tap Thumbnails',
   mobileDetailHint: 'Double tap to open',
-  openLinksInNewTab: false,
+  openLinksInNewTab: true,
   enableProximityScaling: true,
   enableMomentum: false,
   enableHoverReveal: false,
