@@ -3,8 +3,8 @@ export type ToolId =
   | 'openai'
   | 'gemini'
   | 'cursor'
-  | 'spline'
-  | 'midjourney'
+  | 'magicpath'
+  | 'masco'
 
 export type ToolMeta = {
   id: ToolId
@@ -33,15 +33,15 @@ export const toolCatalog: Record<ToolId, ToolMeta> = {
     label: 'Cursor',
     icon: '/tools/cursor.png',
   },
-  spline: {
-    id: 'spline',
-    label: 'Spline',
-    icon: '/tools/spline.png',
+  magicpath: {
+    id: 'magicpath',
+    label: 'Magic Path',
+    icon: '/tools/magic-path.png',
   },
-  midjourney: {
-    id: 'midjourney',
-    label: 'Midjourney',
-    icon: '/tools/midjourney.png',
+  masco: {
+    id: 'masco',
+    label: 'masco.dev',
+    icon: '/tools/masco.png',
   },
 }
 
