@@ -102,6 +102,11 @@ export function DraggableCanvas({
     return { left, top, right, bottom }
   }, [projects])
 
+  const startingFocus = useMemo(
+    () => projects.find((project) => project.id === playgroundConfig.startingFocusProjectId) ?? null,
+    [projects],
+  )
+
   const handlePositionChange = useCallback((offset: { x: number; y: number }) => {
     updateScalesRef.current(offset)
   }, [])
@@ -146,7 +151,7 @@ export function DraggableCanvas({
     applyPosition,
   })
 
-  // Keep the project cluster centered in the current frame (e.g. 1440×800 embeds).
+  // Keep Saturday (or cluster fallback) central-ish in the current frame.
   // Layout positions stay put — only the starting pan offset is derived from the viewport.
   useLayoutEffect(() => {
     const container = containerRef.current
@@ -157,7 +162,13 @@ export function DraggableCanvas({
       if (clientWidth < 2 || clientHeight < 2) return
       if (!Number.isFinite(contentBounds.left) || !Number.isFinite(contentBounds.top)) return
 
-      const next = getCenteredPan(contentBounds, clientWidth, clientHeight, zoomRef.current)
+      const next = getCenteredPan(
+        contentBounds,
+        clientWidth,
+        clientHeight,
+        zoomRef.current,
+        startingFocus,
+      )
       setHomePan(next)
       applyPosition(next)
     }
@@ -165,7 +176,7 @@ export function DraggableCanvas({
     centerInFrame()
     const raf = window.requestAnimationFrame(centerInFrame)
     return () => window.cancelAnimationFrame(raf)
-  }, [applyPosition, containerRef, contentBounds, layout, mobileViewport])
+  }, [applyPosition, containerRef, contentBounds, layout, mobileViewport, startingFocus])
 
   const applyScaleToNode = useCallback(
     (id: string, proximityScale: number) => {

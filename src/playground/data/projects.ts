@@ -40,7 +40,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 200,
     ...thumbnailSizes.large,
     alt: 'Saturday Design System documentation overview',
-    showOnMobile: false,
+    showOnMobile: true,
   },
   {
     id: 'project-02',

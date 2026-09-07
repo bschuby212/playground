@@ -22,26 +22,38 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
 }
 
 /**
- * Phone / tablet canvas (scattered) — two staggered rows of three (6 projects).
- * Packed tighter so more shows by default in the 640 mobile frame.
+ * Phone / tablet canvas (scattered) — Saturday sits mid-composition so the
+ * starting pan can keep it central-ish; surrounding tiles stay readable.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
-  // Row 1
-  'project-02': { x: 12, y: 20, width: 268, height: 184 },
-  'project-03': { x: 292, y: 56, width: 292, height: 196 },
-  'project-05': { x: 600, y: 12, width: 210, height: 290 },
-  // Row 2 — pulled up so both rows read in the first viewport
-  'project-06': { x: 20, y: 320, width: 268, height: 184 },
-  'project-07': { x: 304, y: 360, width: 292, height: 196 },
-  'project-09': { x: 612, y: 300, width: 236, height: 236 },
+  // Row 1 — Saturday in the middle
+  'project-02': { x: 12, y: 36, width: 248, height: 170 },
+  'project-01': { x: 276, y: 12, width: 300, height: 202 },
+  'project-03': { x: 592, y: 48, width: 248, height: 170 },
+  // Row 2
+  'project-05': { x: 24, y: 260, width: 188, height: 260 },
+  'project-06': { x: 228, y: 300, width: 248, height: 170 },
+  'project-07': { x: 492, y: 280, width: 268, height: 180 },
+  'project-09': { x: 776, y: 300, width: 200, height: 200 },
 }
 
 /**
- * Phone / tablet grid (bento) — clean 2×3 pseudo-square tiles.
- * Snaps into a compact block; canvas view restores the staggered spread.
+ * Phone / tablet grid (bento) — Saturday leads the block so home pan
+ * lands on it; remaining tiles fill a compact 2-col grid under/around it.
  */
 export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
-  const ids = [
+  const gap = 10
+  const originX = 12
+  const originY = 16
+  const cell = 152
+  const wide = cell * 2 + gap
+
+  const layout: Record<string, LayoutPlacement> = {
+    // Focal tile — full width of the 2-col grid
+    'project-01': { x: originX, y: originY, width: wide, height: 168 },
+  }
+
+  const rest = [
     'project-02',
     'project-03',
     'project-05',
@@ -49,19 +61,14 @@ export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
     'project-07',
     'project-09',
   ] as const
-  const cell = 152
-  const gap = 10
-  const cols = 2
-  const originX = 12
-  const originY = 16
-  const layout: Record<string, LayoutPlacement> = {}
 
-  ids.forEach((id, index) => {
-    const col = index % cols
-    const row = Math.floor(index / cols)
+  const restOriginY = originY + 168 + gap
+  rest.forEach((id, index) => {
+    const col = index % 2
+    const row = Math.floor(index / 2)
     layout[id] = {
       x: originX + col * (cell + gap),
-      y: originY + row * (cell + gap),
+      y: restOriginY + row * (cell + gap),
       width: cell,
       height: cell,
     }

@@ -40,6 +40,8 @@ export const playgroundConfig = {
   /** Padding around the toolbar where cursor-follow pan is disabled (px). */
   controlsDeadZone: 56,
   defaultLayout: 'bento' as 'scattered' | 'bento',
+  /** Project kept central-ish in the starting viewport on all sizes. */
+  startingFocusProjectId: 'project-01',
   canvasWidth: 2400,
   canvasHeight: 1800,
   gridSize: 32,
