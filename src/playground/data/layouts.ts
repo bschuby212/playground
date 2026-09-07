@@ -101,17 +101,18 @@ export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
   const saturday = mobileThumb('project-01', 340)
   layout['project-01'] = { ...saturday, x: originX, y: originY }
 
+  // Inspo above Buddy so mobile hierarchy matches desktop bento impact.
   const rows: Array<Array<{ id: string; width: number }>> = [
     [
       { id: 'project-02', width: 260 },
       { id: 'project-03', width: 260 },
     ],
     [
-      { id: 'project-05', width: 260 },
+      { id: 'project-07', width: 260 },
       { id: 'project-06', width: 260 },
     ],
     [
-      { id: 'project-07', width: 260 },
+      { id: 'project-05', width: 260 },
       { id: 'project-09', width: 200 },
     ],
   ]
@@ -144,20 +145,20 @@ export const bentoLayout: Record<string, LayoutPlacement> = (() => {
 
   const rowPatterns: Array<Array<'large' | 'medium' | 'small' | 'tall' | 'square'>> = [
     ['medium', 'large', 'medium'],
-    ['large', 'large', 'square'],
-    ['medium', 'large', 'tall'],
+    ['large', 'large', 'large'],
+    ['medium', 'square', 'square'],
   ]
 
-  // Saturday in the middle of the block; others fill around it in stable order.
+  // Saturday centered; Inspo + Invoice flank it; Buddy demoted; Robot square (no tall crop).
   const ids = [
     'project-02',
     'project-03',
     'project-04',
-    'project-05',
-    'project-01',
-    'project-06',
     'project-07',
+    'project-01',
     'project-08',
+    'project-05',
+    'project-06',
     'project-09',
   ]
   const layout: Record<string, LayoutPlacement> = {}
