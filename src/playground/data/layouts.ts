@@ -22,57 +22,111 @@ export const scatteredLayout: Record<string, LayoutPlacement> = {
 }
 
 /**
- * Phone / tablet canvas (scattered) — Saturday sits mid-composition so the
- * starting pan can keep it central-ish; surrounding tiles stay readable.
+ * Intrinsic image sizes — mobile frames follow these ratios so thumbnails
+ * aren’t cropped into squares or tall cards.
  */
-export const mobileVerticalLayout: Record<string, LayoutPlacement> = {
-  // Row 1 — Saturday in the middle
-  'project-02': { x: 12, y: 36, width: 248, height: 170 },
-  'project-01': { x: 276, y: 12, width: 300, height: 202 },
-  'project-03': { x: 592, y: 48, width: 248, height: 170 },
-  // Row 2
-  'project-05': { x: 24, y: 260, width: 188, height: 260 },
-  'project-06': { x: 228, y: 300, width: 248, height: 170 },
-  'project-07': { x: 492, y: 280, width: 268, height: 180 },
-  'project-09': { x: 776, y: 300, width: 200, height: 200 },
+const mobileImageAspect: Record<string, { w: number; h: number }> = {
+  'project-01': { w: 843, h: 632 },
+  'project-02': { w: 842, h: 632 },
+  'project-03': { w: 843, h: 632 },
+  'project-05': { w: 843, h: 632 },
+  'project-06': { w: 842, h: 632 },
+  'project-07': { w: 1920, h: 1440 },
+  'project-09': { w: 403, h: 403 },
+}
+
+function mobileThumb(id: string, displayWidth: number): LayoutPlacement {
+  const aspect = mobileImageAspect[id] ?? { w: 843, h: 632 }
+  return {
+    x: 0,
+    y: 0,
+    width: displayWidth,
+    height: Math.round((displayWidth * aspect.h) / aspect.w),
+  }
 }
 
 /**
- * Phone / tablet grid (bento) — Saturday leads the block so home pan
- * lands on it; remaining tiles fill a compact 2-col grid under/around it.
+ * Phone / tablet canvas (scattered) — natural image ratios, Saturday mid-field.
  */
-export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
-  const gap = 10
+export const mobileVerticalLayout: Record<string, LayoutPlacement> = (() => {
+  const gap = 14
   const originX = 12
   const originY = 16
-  const cell = 152
-  const wide = cell * 2 + gap
 
-  const layout: Record<string, LayoutPlacement> = {
-    // Focal tile — full width of the 2-col grid
-    'project-01': { x: originX, y: originY, width: wide, height: 168 },
+  const row1: Array<{ id: string; width: number }> = [
+    { id: 'project-02', width: 168 },
+    { id: 'project-01', width: 220 },
+    { id: 'project-03', width: 168 },
+  ]
+  const row2: Array<{ id: string; width: number }> = [
+    { id: 'project-05', width: 156 },
+    { id: 'project-06', width: 156 },
+    { id: 'project-07', width: 156 },
+    { id: 'project-09', width: 132 },
+  ]
+  const layout: Record<string, LayoutPlacement> = {}
+
+  let x = originX
+  let row1Height = 0
+  for (const item of row1) {
+    const size = mobileThumb(item.id, item.width)
+    const y = item.id === 'project-01' ? originY : originY + 16
+    layout[item.id] = { ...size, x, y }
+    x += size.width + gap
+    row1Height = Math.max(row1Height, size.height + (y - originY))
   }
 
-  const rest = [
-    'project-02',
-    'project-03',
-    'project-05',
-    'project-06',
-    'project-07',
-    'project-09',
-  ] as const
+  x = originX
+  const row2Y = originY + row1Height + gap
+  for (const item of row2) {
+    const size = mobileThumb(item.id, item.width)
+    layout[item.id] = { ...size, x, y: row2Y }
+    x += size.width + gap
+  }
 
-  const restOriginY = originY + 168 + gap
-  rest.forEach((id, index) => {
-    const col = index % 2
-    const row = Math.floor(index / 2)
-    layout[id] = {
-      x: originX + col * (cell + gap),
-      y: restOriginY + row * (cell + gap),
-      width: cell,
-      height: cell,
+  return layout
+})()
+
+/**
+ * Phone / tablet grid (bento) — packed rows that keep each image’s
+ * natural aspect ratio (no square crop frames).
+ */
+export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
+  const gap = 12
+  const originX = 12
+  const originY = 16
+  const layout: Record<string, LayoutPlacement> = {}
+
+  const saturday = mobileThumb('project-01', 240)
+  layout['project-01'] = { ...saturday, x: originX, y: originY }
+
+  const rows: Array<Array<{ id: string; width: number }>> = [
+    [
+      { id: 'project-02', width: 168 },
+      { id: 'project-03', width: 168 },
+    ],
+    [
+      { id: 'project-05', width: 168 },
+      { id: 'project-06', width: 168 },
+    ],
+    [
+      { id: 'project-07', width: 168 },
+      { id: 'project-09', width: 126 },
+    ],
+  ]
+
+  let y = originY + saturday.height + gap
+  for (const row of rows) {
+    let x = originX
+    let rowHeight = 0
+    for (const item of row) {
+      const size = mobileThumb(item.id, item.width)
+      layout[item.id] = { ...size, x, y }
+      x += size.width + gap
+      rowHeight = Math.max(rowHeight, size.height)
     }
-  })
+    y += rowHeight + gap
+  }
 
   return layout
 })()

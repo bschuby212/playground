@@ -36,6 +36,13 @@
   -webkit-user-drag: none;
 }
 
+/* Mobile / tablet: fill the frame without cropping (frames match image ratios). */
+@media (max-width: 999px) {
+  .project-thumbnail img {
+    object-fit: contain;
+  }
+}
+
 .project-thumbnail.is-active {
   z-index: 5;
   border-color: rgba(26, 26, 26, 0.16);
