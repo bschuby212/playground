@@ -47,22 +47,23 @@ function mobileThumb(id: string, displayWidth: number): LayoutPlacement {
 
 /**
  * Phone / tablet canvas (scattered) — natural image ratios, Saturday mid-field.
+ * Sized closer to prior mobile tile scale so thumbs stay readable.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = (() => {
-  const gap = 14
+  const gap = 16
   const originX = 12
   const originY = 16
 
   const row1: Array<{ id: string; width: number }> = [
-    { id: 'project-02', width: 168 },
-    { id: 'project-01', width: 220 },
-    { id: 'project-03', width: 168 },
+    { id: 'project-02', width: 260 },
+    { id: 'project-01', width: 320 },
+    { id: 'project-03', width: 260 },
   ]
   const row2: Array<{ id: string; width: number }> = [
-    { id: 'project-05', width: 156 },
-    { id: 'project-06', width: 156 },
-    { id: 'project-07', width: 156 },
-    { id: 'project-09', width: 132 },
+    { id: 'project-05', width: 240 },
+    { id: 'project-06', width: 240 },
+    { id: 'project-07', width: 240 },
+    { id: 'project-09', width: 200 },
   ]
   const layout: Record<string, LayoutPlacement> = {}
 
@@ -70,7 +71,7 @@ export const mobileVerticalLayout: Record<string, LayoutPlacement> = (() => {
   let row1Height = 0
   for (const item of row1) {
     const size = mobileThumb(item.id, item.width)
-    const y = item.id === 'project-01' ? originY : originY + 16
+    const y = item.id === 'project-01' ? originY : originY + 20
     layout[item.id] = { ...size, x, y }
     x += size.width + gap
     row1Height = Math.max(row1Height, size.height + (y - originY))
@@ -89,29 +90,29 @@ export const mobileVerticalLayout: Record<string, LayoutPlacement> = (() => {
 
 /**
  * Phone / tablet grid (bento) — packed rows that keep each image’s
- * natural aspect ratio (no square crop frames).
+ * natural aspect ratio at a readable size (no square crop frames).
  */
 export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
-  const gap = 12
+  const gap = 14
   const originX = 12
   const originY = 16
   const layout: Record<string, LayoutPlacement> = {}
 
-  const saturday = mobileThumb('project-01', 240)
+  const saturday = mobileThumb('project-01', 340)
   layout['project-01'] = { ...saturday, x: originX, y: originY }
 
   const rows: Array<Array<{ id: string; width: number }>> = [
     [
-      { id: 'project-02', width: 168 },
-      { id: 'project-03', width: 168 },
+      { id: 'project-02', width: 260 },
+      { id: 'project-03', width: 260 },
     ],
     [
-      { id: 'project-05', width: 168 },
-      { id: 'project-06', width: 168 },
+      { id: 'project-05', width: 260 },
+      { id: 'project-06', width: 260 },
     ],
     [
-      { id: 'project-07', width: 168 },
-      { id: 'project-09', width: 126 },
+      { id: 'project-07', width: 260 },
+      { id: 'project-09', width: 200 },
     ],
   ]
 

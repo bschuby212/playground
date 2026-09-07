@@ -65,10 +65,10 @@
   }
 }
 
-/* Mobile embed — scale down a bit, not too much */
+/* Mobile embed — keep full tile size; ratios stay native via layout. */
 @media (max-width: 799px) {
   .project-thumbnail {
-    --thumb-mobile-scale: 0.86;
+    --thumb-mobile-scale: 1;
     border-radius: 8px;
   }
 }
