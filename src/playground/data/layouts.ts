@@ -8,17 +8,17 @@ export type LayoutPlacement = {
   height: number
 }
 
-/** Organic scattered placement — freeform composition for nine projects. */
+/** Organic scattered placement — Saturday sits mid-field so home pan can keep it in view. */
 export const scatteredLayout: Record<string, LayoutPlacement> = {
-  'project-01': { x: 140, y: 160, ...thumbnailSizes.large },
-  'project-02': { x: 680, y: 100, ...thumbnailSizes.medium },
-  'project-03': { x: 1100, y: 180, ...thumbnailSizes.large },
-  'project-04': { x: 1660, y: 120, ...thumbnailSizes.medium },
-  'project-05': { x: 2080, y: 380, ...thumbnailSizes.tall },
-  'project-06': { x: 180, y: 540, ...thumbnailSizes.medium },
-  'project-07': { x: 600, y: 540, ...thumbnailSizes.large },
-  'project-08': { x: 1160, y: 560, ...thumbnailSizes.large },
-  'project-09': { x: 1720, y: 620, ...thumbnailSizes.square },
+  'project-02': { x: 120, y: 120, ...thumbnailSizes.medium },
+  'project-03': { x: 520, y: 80, ...thumbnailSizes.large },
+  'project-01': { x: 1040, y: 280, ...thumbnailSizes.large },
+  'project-04': { x: 1580, y: 100, ...thumbnailSizes.medium },
+  'project-05': { x: 1980, y: 360, ...thumbnailSizes.tall },
+  'project-06': { x: 160, y: 520, ...thumbnailSizes.medium },
+  'project-07': { x: 560, y: 560, ...thumbnailSizes.large },
+  'project-08': { x: 1540, y: 560, ...thumbnailSizes.large },
+  'project-09': { x: 1100, y: 640, ...thumbnailSizes.square },
 }
 
 /**
@@ -78,7 +78,8 @@ export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
 })()
 
 /**
- * Clean bento rows — three rows for the current 9-item set.
+ * Clean bento rows — Saturday occupies the visual center cell so the
+ * starting viewport can frame it without fighting pan clamps.
  */
 export const bentoLayout: Record<string, LayoutPlacement> = (() => {
   const gap = 28
@@ -87,12 +88,23 @@ export const bentoLayout: Record<string, LayoutPlacement> = (() => {
   const rowGap = 44
 
   const rowPatterns: Array<Array<'large' | 'medium' | 'small' | 'tall' | 'square'>> = [
-    ['large', 'medium', 'large'],
-    ['medium', 'large', 'square'],
+    ['medium', 'large', 'medium'],
+    ['large', 'large', 'square'],
     ['medium', 'large', 'tall'],
   ]
 
-  const ids = Object.keys(scatteredLayout)
+  // Saturday in the middle of the block; others fill around it in stable order.
+  const ids = [
+    'project-02',
+    'project-03',
+    'project-04',
+    'project-05',
+    'project-01',
+    'project-06',
+    'project-07',
+    'project-08',
+    'project-09',
+  ]
   const layout: Record<string, LayoutPlacement> = {}
   let index = 0
   let y = originY
