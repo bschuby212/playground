@@ -161,23 +161,42 @@ export const bentoLayout: Record<string, LayoutPlacement> = (() => {
     'project-06',
     'project-09',
   ]
-  const layout: Record<string, LayoutPlacement> = {}
+  // Measure rows first so shorter ones (esp. bottom) can center under the widest.
+  type RowPlan = {
+    items: Array<{ id: string; width: number; height: number }>
+    width: number
+    height: number
+  }
+  const rows: RowPlan[] = []
   let index = 0
-  let y = originY
-
   for (const pattern of rowPatterns) {
-    let x = originX
-    let rowHeight = 0
+    const items: RowPlan['items'] = []
+    let width = 0
+    let height = 0
     for (const sizeKey of pattern) {
       const id = ids[index]
       if (!id) break
       const size = thumbnailSizes[sizeKey]
-      layout[id] = { x, y, ...size }
-      x += size.width + gap
-      rowHeight = Math.max(rowHeight, size.height)
+      items.push({ id, ...size })
+      width += size.width + (items.length > 1 ? gap : 0)
+      height = Math.max(height, size.height)
       index += 1
     }
-    y += rowHeight + rowGap
+    rows.push({ items, width, height })
+  }
+
+  const maxRowWidth = Math.max(...rows.map((row) => row.width))
+  const layout: Record<string, LayoutPlacement> = {}
+  let y = originY
+
+  for (const row of rows) {
+    // Optical center under the bento block (fixes left-heavy bottom row).
+    let x = originX + Math.round((maxRowWidth - row.width) / 2)
+    for (const item of row.items) {
+      layout[item.id] = { x, y, width: item.width, height: item.height }
+      x += item.width + gap
+    }
+    y += row.height + rowGap
   }
 
   return layout
