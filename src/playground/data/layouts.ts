@@ -32,7 +32,6 @@ const mobileImageAspect: Record<string, { w: number; h: number }> = {
   'project-05': { w: 843, h: 632 },
   'project-06': { w: 842, h: 632 },
   'project-07': { w: 1920, h: 1440 },
-  'project-08': { w: 1920, h: 1280 },
   'project-09': { w: 403, h: 403 },
 }
 
@@ -65,7 +64,6 @@ export const mobileVerticalLayout: Record<string, LayoutPlacement> = (() => {
     { id: 'project-05', width: 240 },
     { id: 'project-06', width: 240 },
     { id: 'project-07', width: 240 },
-    { id: 'project-08', width: 240 },
     { id: 'project-09', width: 200 },
   ]
   const layout: Record<string, LayoutPlacement> = {}
@@ -113,13 +111,10 @@ export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
     ],
     [
       { id: 'project-07', width: 260 },
-      { id: 'project-08', width: 260 },
-    ],
-    [
       { id: 'project-06', width: 260 },
-      { id: 'project-05', width: 260 },
     ],
     [
+      { id: 'project-05', width: 260 },
       { id: 'project-09', width: 200 },
     ],
   ]
