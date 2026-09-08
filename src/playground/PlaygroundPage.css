@@ -38,6 +38,17 @@
   .playground-page {
     min-height: 640px;
   }
+
+  /* Grid first; copy (header) sits underneath on mobile. */
+  .draggable-canvas {
+    order: 1;
+  }
+
+  .playground-header {
+    order: 2;
+    margin-bottom: 0;
+    margin-top: 0.75rem;
+  }
 }
 
 @media (max-width: 799px) {

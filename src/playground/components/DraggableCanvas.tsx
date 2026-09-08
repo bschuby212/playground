@@ -374,9 +374,9 @@ export function DraggableCanvas({
         handleActivate(null)
       }
 
-      // Desktop: don't capture/drag from thumbnails so a single click opens the link.
-      // Touch/tablet: still allow pan-from-thumb; click handler gates open to double-tap.
-      if (!touchMode && onThumbnail) return
+      // Don't capture/drag from thumbnails — lets click/double-tap open links.
+      // Pan from empty canvas / gaps instead.
+      if (onThumbnail) return
 
       handlePointerDown(event)
     },

@@ -64,7 +64,7 @@ export const playgroundConfig = {
   maxZoom: 1.6,
   zoomStep: 0.1,
   defaultZoom: 1 as number,
-  doubleTapMs: 400,
+  doubleTapMs: 500,
   momentumFriction: 0.92,
   momentumMinVelocity: 0.15,
 } as const

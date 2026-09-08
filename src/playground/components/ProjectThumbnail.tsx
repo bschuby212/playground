@@ -100,9 +100,7 @@ function ProjectThumbnailComponent({
 
       if (isDoubleTap) {
         lastTapRef.current = null
-        event.preventDefault()
-        event.stopPropagation()
-        window.open(project.href, '_blank', 'noopener,noreferrer')
+        // Let native <a target="_blank"> open — more reliable in Framer iframes.
         return
       }
 
