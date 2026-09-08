@@ -50,9 +50,10 @@ function mobileThumb(id: string, displayWidth: number): LayoutPlacement {
  * Sized closer to prior mobile tile scale so thumbs stay readable.
  */
 export const mobileVerticalLayout: Record<string, LayoutPlacement> = (() => {
-  const gap = 16
-  const originX = 12
-  const originY = 16
+  // Wider gaps so fingers can pan between thumbs without feeling cramped.
+  const gap = 32
+  const originX = 16
+  const originY = 20
 
   const row1: Array<{ id: string; width: number }> = [
     { id: 'project-02', width: 260 },
@@ -93,9 +94,10 @@ export const mobileVerticalLayout: Record<string, LayoutPlacement> = (() => {
  * natural aspect ratio at a readable size (no square crop frames).
  */
 export const mobileBentoLayout: Record<string, LayoutPlacement> = (() => {
-  const gap = 14
-  const originX = 12
-  const originY = 16
+  // Roomier packing — more open canvas between tiles for smoother pan gestures.
+  const gap = 32
+  const originX = 16
+  const originY = 20
   const layout: Record<string, LayoutPlacement> = {}
 
   const saturday = mobileThumb('project-01', 340)
