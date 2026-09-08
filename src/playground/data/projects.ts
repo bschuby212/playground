@@ -138,7 +138,7 @@ export const playgroundProjects: PlaygroundProject[] = [
     y: 520,
     ...thumbnailSizes.large,
     alt: 'Invoice Studio new invoice and live preview',
-    showOnMobile: false,
+    showOnMobile: true,
   },
   {
     id: 'project-09',
