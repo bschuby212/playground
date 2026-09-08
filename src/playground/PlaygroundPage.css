@@ -20,7 +20,8 @@
   min-height: 0;
   padding: 0;
   box-sizing: border-box;
-  align-items: end;
+  /* stretch — align-items:end shrinks the canvas to ~1px (abs-positioned kids) */
+  align-items: stretch;
 }
 
 /* Header children participate in the page grid (brand | meta, then canvas). */
@@ -45,6 +46,8 @@
   grid-column: 1 / -1;
   grid-row: 2;
   min-height: 0;
+  height: 100%;
+  align-self: stretch;
 }
 
 /* Embed height targets (Framer iframe should match) */
