@@ -149,8 +149,27 @@
   max-width: min(280px, 58vw);
 }
 
+.playground-header__meta.is-touch.is-project {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  max-width: 100%;
+}
+
 .playground-header__meta.is-touch .playground-header__tools {
   display: none;
+}
+
+.playground-header__detail-hint {
+  display: block;
+  margin: 0;
+  padding-left: calc(20px + 8px); /* align under description text, past icon+gap */
+  font-family: var(--font-sans);
+  font-size: max(11px, calc(var(--text-body) - 3px));
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.3;
+  color: #a3a3a3;
 }
 
 /* Mobile / compact: brand above grid; tap hint styles below grid via page grid */

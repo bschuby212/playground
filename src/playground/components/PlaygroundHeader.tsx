@@ -159,6 +159,11 @@ export function PlaygroundHeader({
           </span>
           <span className="playground-header__text">{renderedText}</span>
         </span>
+        {touchMode && !showingHint ? (
+          <span className="playground-header__detail-hint">
+            {playgroundConfig.mobileDetailHint}
+          </span>
+        ) : null}
         {!showingHint && !touchMode && renderedTools.length > 0 ? (
           <span className="playground-header__tools" aria-hidden="true">
             {renderedTools.map((tool) => (

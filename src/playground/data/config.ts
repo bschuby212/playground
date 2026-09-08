@@ -2,7 +2,7 @@ export const playgroundConfig = {
   tagline: 'Design experiments using AI, code, and emerging tools',
   defaultHint: 'Hover Thumbnails',
   mobileHint: 'Tap Thumbnails',
-  mobileDetailHint: 'Double tap to open',
+  mobileDetailHint: 'Double tap to view',
   /**
    * How project links open from the Framer embed.
    * `_blank` opens a real browser tab (Framer blocks `_top` in iframes).
