@@ -153,15 +153,23 @@ export function DraggableCanvas({
 
   // Keep Saturday (or cluster fallback) central-ish in the current frame.
   // Layout positions stay put — only the starting pan offset is derived from the viewport.
+  // ResizeObserver covers Framer embeds that mount at 0×0 then grow to the iframe size.
   useLayoutEffect(() => {
     const container = containerRef.current
     if (!container) return
 
-    const centerInFrame = () => {
+    let hasSized = false
+
+    const centerInFrame = (force = false) => {
       const { clientWidth, clientHeight } = container
-      if (clientWidth < 2 || clientHeight < 2) return
+      if (clientWidth < 2 || clientHeight < 2) {
+        hasSized = false
+        return
+      }
+      if (!force && hasSized) return
       if (!Number.isFinite(contentBounds.left) || !Number.isFinite(contentBounds.top)) return
 
+      hasSized = true
       const next = getCenteredPan(
         contentBounds,
         clientWidth,
@@ -173,9 +181,16 @@ export function DraggableCanvas({
       applyPosition(next)
     }
 
-    centerInFrame()
-    const raf = window.requestAnimationFrame(centerInFrame)
-    return () => window.cancelAnimationFrame(raf)
+    centerInFrame(true)
+    const raf = window.requestAnimationFrame(() => centerInFrame(true))
+    const observer = new ResizeObserver(() => {
+      centerInFrame(false)
+    })
+    observer.observe(container)
+    return () => {
+      window.cancelAnimationFrame(raf)
+      observer.disconnect()
+    }
   }, [applyPosition, containerRef, contentBounds, layout, mobileViewport, startingFocus])
 
   const applyScaleToNode = useCallback(

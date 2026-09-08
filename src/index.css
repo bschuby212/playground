@@ -32,7 +32,27 @@ body,
   margin: 0;
   width: 100%;
   height: 100%;
+  /* Pixel mins match Framer iframe targets so overflow:hidden can't clip a
+     0%-height embed (percentage height collapses when the iframe has no
+     intrinsic size — common on desktop Framer embeds). */
+  min-height: 640px;
   overflow: hidden;
+}
+
+@media (min-width: 1000px) and (max-width: 1439px) {
+  html,
+  body,
+  #root {
+    min-height: 720px;
+  }
+}
+
+@media (min-width: 1440px) {
+  html,
+  body,
+  #root {
+    min-height: 900px;
+  }
 }
 
 body {
