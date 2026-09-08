@@ -44,6 +44,7 @@ export function useCanvasDrag({
   const prevZoomRef = useRef(zoom)
   const contentBoundsRef = useRef(contentBounds)
   const pointerIdRef = useRef<number | null>(null)
+  const softArmRef = useRef(false)
   const dragOriginRef = useRef<Point>({ x: 0, y: 0 })
   const positionOriginRef = useRef<Point>({ x: startingX, y: startingY })
   const movedDistanceRef = useRef(0)
@@ -197,7 +198,10 @@ export function useCanvasDrag({
   }, [applyPosition, enableMomentum, reducedMotion, stopMomentum])
 
   const handlePointerDown = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+    (
+      event: ReactPointerEvent<HTMLDivElement>,
+      options?: { soft?: boolean },
+    ) => {
       if (event.button !== 0 && event.pointerType === 'mouse') return
 
       stopMomentum()
@@ -205,8 +209,9 @@ export function useCanvasDrag({
       const container = containerRef.current
       if (!container) return
 
+      const soft = Boolean(options?.soft)
+      softArmRef.current = soft
       pointerIdRef.current = event.pointerId
-      container.setPointerCapture(event.pointerId)
       dragOriginRef.current = { x: event.clientX, y: event.clientY }
       positionOriginRef.current = { ...positionRef.current }
       movedDistanceRef.current = 0
@@ -217,7 +222,12 @@ export function useCanvasDrag({
         point: { x: event.clientX, y: event.clientY },
         time: performance.now(),
       }
-      container.classList.add('is-dragging')
+
+      // Soft (touch on thumbnail): wait for a real slide before capturing so
+      // single/double-tap clicks still fire. Empty-canvas pans capture immediately.
+      if (!soft) {
+        container.setPointerCapture(event.pointerId)
+      }
     },
     [stopMomentum, stopReveal],
   )
@@ -231,9 +241,16 @@ export function useCanvasDrag({
       const distance = Math.hypot(dx, dy)
       movedDistanceRef.current = distance
 
-      if (distance > dragThreshold) {
+      if (distance > dragThreshold && !isDraggingRef.current) {
         isDraggingRef.current = true
         suppressClickRef.current = true
+        const container = containerRef.current
+        if (container) {
+          if (softArmRef.current && !container.hasPointerCapture(event.pointerId)) {
+            container.setPointerCapture(event.pointerId)
+          }
+          container.classList.add('is-dragging')
+        }
       }
 
       if (!isDraggingRef.current) return
@@ -278,10 +295,12 @@ export function useCanvasDrag({
         container.releasePointerCapture(event.pointerId)
       }
 
+      const didDrag = isDraggingRef.current
       pointerIdRef.current = null
+      softArmRef.current = false
       container?.classList.remove('is-dragging')
 
-      if (isDraggingRef.current) {
+      if (didDrag) {
         startMomentum()
       }
 
@@ -297,7 +316,7 @@ export function useCanvasDrag({
   )
 
   const shouldSuppressClick = useCallback(() => suppressClickRef.current, [])
-  const isDragging = useCallback(() => isDraggingRef.current || pointerIdRef.current !== null, [])
+  const isDragging = useCallback(() => isDraggingRef.current, [])
 
   useEffect(() => {
     applyPosition({ x: startingX, y: startingY })

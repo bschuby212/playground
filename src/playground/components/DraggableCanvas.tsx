@@ -374,9 +374,14 @@ export function DraggableCanvas({
         handleActivate(null)
       }
 
-      // Don't capture/drag from thumbnails — lets click/double-tap open links.
-      // Pan from empty canvas / gaps instead.
-      if (onThumbnail) return
+      // Desktop: never drag from thumbs (single click opens).
+      // Touch: soft-arm pan from thumbs — slide past threshold pans; tap still
+      // fires so first tap selects and second tap opens.
+      if (onThumbnail) {
+        if (!touchMode) return
+        handlePointerDown(event, { soft: true })
+        return
+      }
 
       handlePointerDown(event)
     },
